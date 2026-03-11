@@ -157,7 +157,11 @@ const ImageUpload = ({ onImageChange }) => {
               ? "border-blue-500 bg-blue-50"
               : "border-gray-300 hover:border-gray-400 bg-gray-50"
           }`}
-          onClick={() => fileInputRef.current?.click()}
+          onClick={() => {
+  if (fileInputRef.current) {
+    fileInputRef.current.click();
+  }
+}}
           onDragOver={(e) => e.preventDefault()}
           onDragEnter={() => setDragActive(true)}
           onDragLeave={() => setDragActive(false)}
@@ -178,7 +182,7 @@ const ImageUpload = ({ onImageChange }) => {
             type="file"
             accept="image/jpeg,image/png,image/jpg"
             onChange={handleChange}
-            style={{ display: "none" }}
+            className="hidden"
           />
         </div>
       )}
