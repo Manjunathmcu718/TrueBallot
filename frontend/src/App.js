@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react
 import VoterAuth from './pages/VoterAuth';
 import Admin from './pages/Admin';
 import Dashboard from './pages/Dashboard';
-import BoothAllocation from './pages/Boothallocation';
+import BoothAllocation from './pages/BoothAllocation';
 import { Shield, Users, TrendingUp, Vote, Brain, MapPin } from 'lucide-react';
 
 const Layout = ({ children }) => {
