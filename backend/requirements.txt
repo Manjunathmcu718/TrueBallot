@@ -4,7 +4,8 @@ Flask-PyMongo
 python-dotenv
 scikit-learn
 pandas
-numpy==1.24.3
+# numpy==1.24.3
+numpy>=1.26
 twilio
 Pillow>=12.0.0
 opencv-python-headless==4.8.1.78

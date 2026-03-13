@@ -29,6 +29,14 @@ export default function AddVoterForm({ onSubmit, onCancel }) {
   const [isAllocating, setIsAllocating] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const readFileAsDataUrl = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => reject(new Error("Failed to read image file."));
+      reader.readAsDataURL(file);
+    });
+
   const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
@@ -99,29 +107,23 @@ export default function AddVoterForm({ onSubmit, onCancel }) {
       age--;
     }
 
-    const data = new FormData();
-
-    Object.keys(formData).forEach(key => {
-      data.append(key, formData[key]);
-    });
-
-    data.append("age", age);
-    data.append("face_image", faceImage);
-
     try {
       setIsSubmitting(true);
+      const image = await readFileAsDataUrl(faceImage);
+      const payload = {
+        ...formData,
+        age,
+        image
+      };
 
-      await axios.post(
-        "http://127.0.0.1:5000/api/add-voter",
-        data,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
-
-      alert("Voter added successfully!");
-      if (onSubmit) onSubmit();
-
-    } catch {
-      alert("Failed to add voter.");
+      if (onSubmit) {
+        await onSubmit(payload);
+      }
+    } catch (submitError) {
+      const message =
+        submitError?.response?.data?.error ||
+        "Failed to add voter.";
+      setError(message);
     }
 
     setIsSubmitting(false);
