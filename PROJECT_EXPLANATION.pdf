@@ -1,0 +1,1919 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+2 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+3 0 obj
+<< /Length 2483 >>
+stream
+BT
+/F2 18 Tf
+1 0 0 1 50 782 Tm
+(AI VOTER AUTHENTICATION SYSTEM) Tj
+/F1 11 Tf
+1 0 0 1 50 754 Tm
+() Tj
+/F2 14 Tf
+1 0 0 1 50 738 Tm
+(1. Project Overview) Tj
+/F1 11 Tf
+1 0 0 1 50 716 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 700 Tm
+(This project is an AI-based Voter Authentication System. Its purpose is to verify a) Tj
+/F1 11 Tf
+1 0 0 1 50 684 Tm
+(voter before allowing vote recording. It combines identity checks, face verification,) Tj
+/F1 11 Tf
+1 0 0 1 50 668 Tm
+(OTP verification, admin management, booth mapping, and dashboard analytics.) Tj
+/F1 11 Tf
+1 0 0 1 50 652 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 636 Tm
+(The project has three main parts:) Tj
+/F1 11 Tf
+1 0 0 1 50 620 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 604 Tm
+(- Frontend built with React) Tj
+/F1 11 Tf
+1 0 0 1 50 588 Tm
+(- Backend built with Flask) Tj
+/F1 11 Tf
+1 0 0 1 50 572 Tm
+(- Database built on MongoDB) Tj
+/F1 11 Tf
+1 0 0 1 50 556 Tm
+() Tj
+/F2 14 Tf
+1 0 0 1 50 540 Tm
+(2. Main Goal of the Project) Tj
+/F1 11 Tf
+1 0 0 1 50 518 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 502 Tm
+(The system is designed to:) Tj
+/F1 11 Tf
+1 0 0 1 50 486 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 470 Tm
+(- verify voter identity) Tj
+/F1 11 Tf
+1 0 0 1 50 454 Tm
+(- validate government IDs) Tj
+/F1 11 Tf
+1 0 0 1 50 438 Tm
+(- compare live face with stored voter photo) Tj
+/F1 11 Tf
+1 0 0 1 50 422 Tm
+(- send OTP to the voter) Tj
+/F1 11 Tf
+1 0 0 1 50 406 Tm
+(- record whether the voter has voted) Tj
+/F1 11 Tf
+1 0 0 1 50 390 Tm
+(- help admin manage voters and booths) Tj
+/F1 11 Tf
+1 0 0 1 50 374 Tm
+(- show dashboard statistics and possible fraud patterns) Tj
+/F1 11 Tf
+1 0 0 1 50 358 Tm
+() Tj
+/F2 14 Tf
+1 0 0 1 50 342 Tm
+(3. Overall Architecture) Tj
+/F1 11 Tf
+1 0 0 1 50 320 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 304 Tm
+(Frontend) Tj
+/F1 11 Tf
+1 0 0 1 50 286 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 270 Tm
+(The frontend is in the `frontend` folder. It provides the user interface for:) Tj
+/F1 11 Tf
+1 0 0 1 50 254 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 238 Tm
+(- voter authentication) Tj
+/F1 11 Tf
+1 0 0 1 50 222 Tm
+(- admin panel) Tj
+/F1 11 Tf
+1 0 0 1 50 206 Tm
+(- election dashboard) Tj
+/F1 11 Tf
+1 0 0 1 50 190 Tm
+(- booth allocation) Tj
+/F1 11 Tf
+1 0 0 1 50 174 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 158 Tm
+(Backend) Tj
+/F1 11 Tf
+1 0 0 1 50 140 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 124 Tm
+(The backend is in the `backend` folder. It handles:) Tj
+/F1 11 Tf
+1 0 0 1 50 108 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 92 Tm
+(- API routes) Tj
+/F1 11 Tf
+1 0 0 1 50 76 Tm
+(- database operations) Tj
+/F1 10 Tf
+1 0 0 1 475 25 Tm
+(Page 1 of 13) Tj
+ET
+endstream
+endobj
+4 0 obj
+<< /Length 2131 >>
+stream
+BT
+/F1 11 Tf
+1 0 0 1 50 782 Tm
+(- image validation) Tj
+/F1 11 Tf
+1 0 0 1 50 766 Tm
+(- face verification) Tj
+/F1 11 Tf
+1 0 0 1 50 750 Tm
+(- OTP generation) Tj
+/F1 11 Tf
+1 0 0 1 50 734 Tm
+(- SMS sending) Tj
+/F1 11 Tf
+1 0 0 1 50 718 Tm
+(- anomaly detection) Tj
+/F1 11 Tf
+1 0 0 1 50 702 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 686 Tm
+(Database) Tj
+/F1 11 Tf
+1 0 0 1 50 668 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 652 Tm
+(MongoDB stores all project data such as:) Tj
+/F1 11 Tf
+1 0 0 1 50 636 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 620 Tm
+(- voters) Tj
+/F1 11 Tf
+1 0 0 1 50 604 Tm
+(- booths) Tj
+/F1 11 Tf
+1 0 0 1 50 588 Tm
+(- anomalies) Tj
+/F1 11 Tf
+1 0 0 1 50 572 Tm
+(- locality-to-booth mappings) Tj
+/F1 11 Tf
+1 0 0 1 50 556 Tm
+(- voter photos using GridFS) Tj
+/F1 11 Tf
+1 0 0 1 50 540 Tm
+() Tj
+/F2 14 Tf
+1 0 0 1 50 524 Tm
+(4. Frontend Technologies and Libraries) Tj
+/F1 11 Tf
+1 0 0 1 50 502 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 486 Tm
+(Frontend dependencies are listed in `frontend/package.json`.) Tj
+/F1 11 Tf
+1 0 0 1 50 470 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 454 Tm
+(React) Tj
+/F1 11 Tf
+1 0 0 1 50 436 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 420 Tm
+(Used to build the UI.) Tj
+/F1 11 Tf
+1 0 0 1 50 404 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 388 Tm
+(React Router DOM) Tj
+/F1 11 Tf
+1 0 0 1 50 370 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 354 Tm
+(Used for page navigation between:) Tj
+/F1 11 Tf
+1 0 0 1 50 338 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 322 Tm
+(- Voter Login) Tj
+/F1 11 Tf
+1 0 0 1 50 306 Tm
+(- Dashboard) Tj
+/F1 11 Tf
+1 0 0 1 50 290 Tm
+(- Admin) Tj
+/F1 11 Tf
+1 0 0 1 50 274 Tm
+(- Booth Allocation) Tj
+/F1 11 Tf
+1 0 0 1 50 258 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 242 Tm
+(Axios) Tj
+/F1 11 Tf
+1 0 0 1 50 224 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 208 Tm
+(Used for sending HTTP requests to the backend APIs.) Tj
+/F1 11 Tf
+1 0 0 1 50 192 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 176 Tm
+(Framer Motion) Tj
+/F1 11 Tf
+1 0 0 1 50 158 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 142 Tm
+(Used for page and component animations.) Tj
+/F1 11 Tf
+1 0 0 1 50 126 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 110 Tm
+(Lucide React) Tj
+/F1 11 Tf
+1 0 0 1 50 92 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 76 Tm
+(Used for icons across the UI.) Tj
+/F1 10 Tf
+1 0 0 1 475 25 Tm
+(Page 2 of 13) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Length 2158 >>
+stream
+BT
+/F1 11 Tf
+1 0 0 1 50 782 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 766 Tm
+(Tailwind CSS) Tj
+/F1 11 Tf
+1 0 0 1 50 748 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 732 Tm
+(Used for styling and layout design.) Tj
+/F1 11 Tf
+1 0 0 1 50 716 Tm
+() Tj
+/F2 14 Tf
+1 0 0 1 50 700 Tm
+(5. Backend Technologies and Libraries) Tj
+/F1 11 Tf
+1 0 0 1 50 678 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 662 Tm
+(Backend dependencies are listed in `backend/requirements.txt`.) Tj
+/F1 11 Tf
+1 0 0 1 50 646 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 630 Tm
+(Flask) Tj
+/F1 11 Tf
+1 0 0 1 50 612 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 596 Tm
+(Main backend framework.) Tj
+/F1 11 Tf
+1 0 0 1 50 580 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 564 Tm
+(Flask-CORS) Tj
+/F1 11 Tf
+1 0 0 1 50 546 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 530 Tm
+(Allows frontend and backend to communicate from different ports.) Tj
+/F1 11 Tf
+1 0 0 1 50 514 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 498 Tm
+(Flask-PyMongo) Tj
+/F1 11 Tf
+1 0 0 1 50 480 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 464 Tm
+(Connects Flask with MongoDB.) Tj
+/F1 11 Tf
+1 0 0 1 50 448 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 432 Tm
+(python-dotenv) Tj
+/F1 11 Tf
+1 0 0 1 50 414 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 398 Tm
+(Loads environment variables such as MongoDB and Twilio credentials.) Tj
+/F1 11 Tf
+1 0 0 1 50 382 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 366 Tm
+(Twilio) Tj
+/F1 11 Tf
+1 0 0 1 50 348 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 332 Tm
+(Used for OTP and confirmation SMS.) Tj
+/F1 11 Tf
+1 0 0 1 50 316 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 300 Tm
+(Pillow) Tj
+/F1 11 Tf
+1 0 0 1 50 282 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 266 Tm
+(Used for image processing.) Tj
+/F1 11 Tf
+1 0 0 1 50 250 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 234 Tm
+(OpenCV) Tj
+/F1 11 Tf
+1 0 0 1 50 216 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 200 Tm
+(Used for image validation and anti-spoofing checks.) Tj
+/F1 11 Tf
+1 0 0 1 50 184 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 168 Tm
+(DeepFace) Tj
+/F1 11 Tf
+1 0 0 1 50 150 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 134 Tm
+(Used for face verification between stored and live voter images.) Tj
+/F1 11 Tf
+1 0 0 1 50 118 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 102 Tm
+(NumPy) Tj
+/F1 11 Tf
+1 0 0 1 50 84 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 68 Tm
+(Used in image processing calculations.) Tj
+/F1 10 Tf
+1 0 0 1 475 25 Tm
+(Page 3 of 13) Tj
+ET
+endstream
+endobj
+6 0 obj
+<< /Length 2232 >>
+stream
+BT
+/F1 11 Tf
+1 0 0 1 50 782 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 766 Tm
+(Requests) Tj
+/F1 11 Tf
+1 0 0 1 50 748 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 732 Tm
+(Used when image data needs to be fetched from a URL.) Tj
+/F1 11 Tf
+1 0 0 1 50 716 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 700 Tm
+(Pandas and Scikit-learn) Tj
+/F1 11 Tf
+1 0 0 1 50 682 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 666 Tm
+(Present in requirements, but not strongly used in the main active flow right now.) Tj
+/F1 11 Tf
+1 0 0 1 50 650 Tm
+() Tj
+/F2 14 Tf
+1 0 0 1 50 634 Tm
+(6. Important Backend Files) Tj
+/F1 11 Tf
+1 0 0 1 50 612 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 596 Tm
+(`backend/app.py`) Tj
+/F1 11 Tf
+1 0 0 1 50 578 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 562 Tm
+(This is the main backend entry point.) Tj
+/F1 11 Tf
+1 0 0 1 50 546 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 530 Tm
+(It:) Tj
+/F1 11 Tf
+1 0 0 1 50 514 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 498 Tm
+(- creates the Flask app) Tj
+/F1 11 Tf
+1 0 0 1 50 482 Tm
+(- loads environment variables) Tj
+/F1 11 Tf
+1 0 0 1 50 466 Tm
+(- connects MongoDB) Tj
+/F1 11 Tf
+1 0 0 1 50 450 Tm
+(- enables CORS) Tj
+/F1 11 Tf
+1 0 0 1 50 434 Tm
+(- registers route blueprints) Tj
+/F1 11 Tf
+1 0 0 1 50 418 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 402 Tm
+(Blueprints registered:) Tj
+/F1 11 Tf
+1 0 0 1 50 386 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 370 Tm
+(- auth routes) Tj
+/F1 11 Tf
+1 0 0 1 50 354 Tm
+(- admin routes) Tj
+/F1 11 Tf
+1 0 0 1 50 338 Tm
+(- data routes) Tj
+/F1 11 Tf
+1 0 0 1 50 322 Tm
+(- government verification routes) Tj
+/F1 11 Tf
+1 0 0 1 50 306 Tm
+(- image routes) Tj
+/F1 11 Tf
+1 0 0 1 50 290 Tm
+(- booth allocation routes) Tj
+/F1 11 Tf
+1 0 0 1 50 274 Tm
+(- anomaly routes) Tj
+/F1 11 Tf
+1 0 0 1 50 258 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 242 Tm
+(`backend/routes/auth_routes.py`) Tj
+/F1 11 Tf
+1 0 0 1 50 224 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 208 Tm
+(This file handles voter authentication.) Tj
+/F1 11 Tf
+1 0 0 1 50 192 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 176 Tm
+(Main endpoints:) Tj
+/F1 11 Tf
+1 0 0 1 50 160 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 144 Tm
+(- `/api/auth/authenticate`) Tj
+/F1 11 Tf
+1 0 0 1 50 128 Tm
+(- `/api/auth/verify-otp`) Tj
+/F1 11 Tf
+1 0 0 1 50 112 Tm
+(- `/api/auth/vote`) Tj
+/F1 11 Tf
+1 0 0 1 50 96 Tm
+(- `/api/auth/compare-faces`) Tj
+/F1 11 Tf
+1 0 0 1 50 80 Tm
+() Tj
+/F1 10 Tf
+1 0 0 1 475 25 Tm
+(Page 4 of 13) Tj
+ET
+endstream
+endobj
+7 0 obj
+<< /Length 2263 >>
+stream
+BT
+/F1 11 Tf
+1 0 0 1 50 782 Tm
+(Responsibilities:) Tj
+/F1 11 Tf
+1 0 0 1 50 766 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 750 Tm
+(- match voter credentials from DB) Tj
+/F1 11 Tf
+1 0 0 1 50 734 Tm
+(- check age eligibility) Tj
+/F1 11 Tf
+1 0 0 1 50 718 Tm
+(- verify face using stored image and live image) Tj
+/F1 11 Tf
+1 0 0 1 50 702 Tm
+(- create OTP) Tj
+/F1 11 Tf
+1 0 0 1 50 686 Tm
+(- verify OTP) Tj
+/F1 11 Tf
+1 0 0 1 50 670 Tm
+(- record vote) Tj
+/F1 11 Tf
+1 0 0 1 50 654 Tm
+(- send SMS) Tj
+/F1 11 Tf
+1 0 0 1 50 638 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 622 Tm
+(`backend/routes/admin_routes.py`) Tj
+/F1 11 Tf
+1 0 0 1 50 604 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 588 Tm
+(This file handles admin operations.) Tj
+/F1 11 Tf
+1 0 0 1 50 572 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 556 Tm
+(Main features:) Tj
+/F1 11 Tf
+1 0 0 1 50 540 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 524 Tm
+(- add voter) Tj
+/F1 11 Tf
+1 0 0 1 50 508 Tm
+(- list voters) Tj
+/F1 11 Tf
+1 0 0 1 50 492 Tm
+(- delete voter) Tj
+/F1 11 Tf
+1 0 0 1 50 476 Tm
+(- add booth) Tj
+/F1 11 Tf
+1 0 0 1 50 460 Tm
+(- list booths) Tj
+/F1 11 Tf
+1 0 0 1 50 444 Tm
+(- upload and fetch voter image) Tj
+/F1 11 Tf
+1 0 0 1 50 428 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 412 Tm
+(It also validates:) Tj
+/F1 11 Tf
+1 0 0 1 50 396 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 380 Tm
+(- voter ID format) Tj
+/F1 11 Tf
+1 0 0 1 50 364 Tm
+(- Aadhaar format) Tj
+/F1 11 Tf
+1 0 0 1 50 348 Tm
+(- phone number format) Tj
+/F1 11 Tf
+1 0 0 1 50 332 Tm
+(- duplicate voter records) Tj
+/F1 11 Tf
+1 0 0 1 50 316 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 300 Tm
+(`backend/routes/data_routes.py`) Tj
+/F1 11 Tf
+1 0 0 1 50 282 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 266 Tm
+(This file provides dashboard and data APIs.) Tj
+/F1 11 Tf
+1 0 0 1 50 250 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 234 Tm
+(It returns:) Tj
+/F1 11 Tf
+1 0 0 1 50 218 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 202 Tm
+(- total voters) Tj
+/F1 11 Tf
+1 0 0 1 50 186 Tm
+(- voted count) Tj
+/F1 11 Tf
+1 0 0 1 50 170 Tm
+(- not voted count) Tj
+/F1 11 Tf
+1 0 0 1 50 154 Tm
+(- recent votes) Tj
+/F1 11 Tf
+1 0 0 1 50 138 Tm
+(- anomaly list) Tj
+/F1 11 Tf
+1 0 0 1 50 122 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 106 Tm
+(It also has anomaly detection logic based on turnout.) Tj
+/F1 11 Tf
+1 0 0 1 50 90 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 74 Tm
+(`backend/routes/gov_verify_routes.py`) Tj
+/F1 10 Tf
+1 0 0 1 475 25 Tm
+(Page 5 of 13) Tj
+ET
+endstream
+endobj
+8 0 obj
+<< /Length 2352 >>
+stream
+BT
+/F1 11 Tf
+1 0 0 1 50 782 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 766 Tm
+(This file simulates government verification.) Tj
+/F1 11 Tf
+1 0 0 1 50 750 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 734 Tm
+(It pretends to verify:) Tj
+/F1 11 Tf
+1 0 0 1 50 718 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 702 Tm
+(- Aadhaar through UIDAI) Tj
+/F1 11 Tf
+1 0 0 1 50 686 Tm
+(- voter ID through Election Commission) Tj
+/F1 11 Tf
+1 0 0 1 50 670 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 654 Tm
+(This is demo logic, not real government API integration.) Tj
+/F1 11 Tf
+1 0 0 1 50 638 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 622 Tm
+(`backend/routes/booth_allocation.py`) Tj
+/F1 11 Tf
+1 0 0 1 50 604 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 588 Tm
+(This file handles locality-to-booth mapping.) Tj
+/F1 11 Tf
+1 0 0 1 50 572 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 556 Tm
+(Features:) Tj
+/F1 11 Tf
+1 0 0 1 50 540 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 524 Tm
+(- create booth mapping manually) Tj
+/F1 11 Tf
+1 0 0 1 50 508 Tm
+(- get mappings) Tj
+/F1 11 Tf
+1 0 0 1 50 492 Tm
+(- delete mapping) Tj
+/F1 11 Tf
+1 0 0 1 50 476 Tm
+(- auto-allocate booth from address) Tj
+/F1 11 Tf
+1 0 0 1 50 460 Tm
+(- bulk analyze addresses) Tj
+/F1 11 Tf
+1 0 0 1 50 444 Tm
+(- auto-generate mappings from voter data) Tj
+/F1 11 Tf
+1 0 0 1 50 428 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 412 Tm
+(`backend/routes/anomaly_routes.py`) Tj
+/F1 11 Tf
+1 0 0 1 50 394 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 378 Tm
+(This file handles advanced anomaly detection.) Tj
+/F1 11 Tf
+1 0 0 1 50 362 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 346 Tm
+(It checks for:) Tj
+/F1 11 Tf
+1 0 0 1 50 330 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 314 Tm
+(- high turnout) Tj
+/F1 11 Tf
+1 0 0 1 50 298 Tm
+(- low turnout) Tj
+/F1 11 Tf
+1 0 0 1 50 282 Tm
+(- duplicate Aadhaar) Tj
+/F1 11 Tf
+1 0 0 1 50 266 Tm
+(- shared phone numbers) Tj
+/F1 11 Tf
+1 0 0 1 50 250 Tm
+(- location mismatch) Tj
+/F1 11 Tf
+1 0 0 1 50 234 Tm
+(- vote spike) Tj
+/F1 11 Tf
+1 0 0 1 50 218 Tm
+() Tj
+/F2 14 Tf
+1 0 0 1 50 202 Tm
+(7. Important Utility Files) Tj
+/F1 11 Tf
+1 0 0 1 50 180 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 164 Tm
+(`backend/utils/validation.py`) Tj
+/F1 11 Tf
+1 0 0 1 50 146 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 130 Tm
+(Contains helper functions for:) Tj
+/F1 11 Tf
+1 0 0 1 50 114 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 98 Tm
+(- Aadhaar validation) Tj
+/F1 11 Tf
+1 0 0 1 50 82 Tm
+(- voter ID validation) Tj
+/F1 11 Tf
+1 0 0 1 50 66 Tm
+(- Indian phone validation) Tj
+/F1 10 Tf
+1 0 0 1 475 25 Tm
+(Page 6 of 13) Tj
+ET
+endstream
+endobj
+9 0 obj
+<< /Length 2224 >>
+stream
+BT
+/F1 11 Tf
+1 0 0 1 50 782 Tm
+(- age calculation) Tj
+/F1 11 Tf
+1 0 0 1 50 766 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 750 Tm
+(`backend/utils/sms.py`) Tj
+/F1 11 Tf
+1 0 0 1 50 732 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 716 Tm
+(Handles SMS sending using Twilio.) Tj
+/F1 11 Tf
+1 0 0 1 50 700 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 684 Tm
+(If Twilio is not configured, it prints a simulated SMS in the console.) Tj
+/F1 11 Tf
+1 0 0 1 50 668 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 652 Tm
+(`backend/utils/image_validator.py`) Tj
+/F1 11 Tf
+1 0 0 1 50 634 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 618 Tm
+(Validates uploaded voter images.) Tj
+/F1 11 Tf
+1 0 0 1 50 602 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 586 Tm
+(Checks include:) Tj
+/F1 11 Tf
+1 0 0 1 50 570 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 554 Tm
+(- file size) Tj
+/F1 11 Tf
+1 0 0 1 50 538 Tm
+(- image format) Tj
+/F1 11 Tf
+1 0 0 1 50 522 Tm
+(- image dimensions) Tj
+/F1 11 Tf
+1 0 0 1 50 506 Tm
+(- orientation) Tj
+/F1 11 Tf
+1 0 0 1 50 490 Tm
+(- blur) Tj
+/F1 11 Tf
+1 0 0 1 50 474 Tm
+(- face detection) Tj
+/F1 11 Tf
+1 0 0 1 50 458 Tm
+(- single-face requirement) Tj
+/F1 11 Tf
+1 0 0 1 50 442 Tm
+() Tj
+/F2 14 Tf
+1 0 0 1 50 426 Tm
+(8. Face Verification Service) Tj
+/F1 11 Tf
+1 0 0 1 50 404 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 388 Tm
+(`backend/services/advanced_face_verification.py`) Tj
+/F1 11 Tf
+1 0 0 1 50 370 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 354 Tm
+(This is the AI module of the project.) Tj
+/F1 11 Tf
+1 0 0 1 50 338 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 322 Tm
+(It performs:) Tj
+/F1 11 Tf
+1 0 0 1 50 306 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 290 Tm
+(- anti-spoof detection) Tj
+/F1 11 Tf
+1 0 0 1 50 274 Tm
+(- face comparison using DeepFace) Tj
+/F1 11 Tf
+1 0 0 1 50 258 Tm
+(- confidence scoring) Tj
+/F1 11 Tf
+1 0 0 1 50 242 Tm
+(- final match decision) Tj
+/F1 11 Tf
+1 0 0 1 50 226 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 210 Tm
+(The stored voter photo is compared against the live webcam image.) Tj
+/F1 11 Tf
+1 0 0 1 50 194 Tm
+() Tj
+/F2 14 Tf
+1 0 0 1 50 178 Tm
+(9. Frontend Main Pages) Tj
+/F1 11 Tf
+1 0 0 1 50 156 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 140 Tm
+(`frontend/src/App.js`) Tj
+/F1 11 Tf
+1 0 0 1 50 122 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 106 Tm
+(Main router file.) Tj
+/F1 11 Tf
+1 0 0 1 50 90 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 74 Tm
+(Routes:) Tj
+/F1 10 Tf
+1 0 0 1 475 25 Tm
+(Page 7 of 13) Tj
+ET
+endstream
+endobj
+10 0 obj
+<< /Length 2337 >>
+stream
+BT
+/F1 11 Tf
+1 0 0 1 50 782 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 766 Tm
+(- `/` for voter authentication) Tj
+/F1 11 Tf
+1 0 0 1 50 750 Tm
+(- `/dashboard` for dashboard) Tj
+/F1 11 Tf
+1 0 0 1 50 734 Tm
+(- `/admin` for admin panel) Tj
+/F1 11 Tf
+1 0 0 1 50 718 Tm
+(- `/booth-allocation` for booth allocation) Tj
+/F1 11 Tf
+1 0 0 1 50 702 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 686 Tm
+(`frontend/src/pages/VoterAuth.js`) Tj
+/F1 11 Tf
+1 0 0 1 50 668 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 652 Tm
+(This is the main voter-side workflow page.) Tj
+/F1 11 Tf
+1 0 0 1 50 636 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 620 Tm
+(It controls these steps:) Tj
+/F1 11 Tf
+1 0 0 1 50 604 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 588 Tm
+(1. voter enters details) Tj
+/F1 11 Tf
+1 0 0 1 50 572 Tm
+(2. government verification runs) Tj
+/F1 11 Tf
+1 0 0 1 50 556 Tm
+(3. face verification runs) Tj
+/F1 11 Tf
+1 0 0 1 50 540 Tm
+(4. backend authenticates voter) Tj
+/F1 11 Tf
+1 0 0 1 50 524 Tm
+(5. OTP is verified) Tj
+/F1 11 Tf
+1 0 0 1 50 508 Tm
+(6. vote status is shown) Tj
+/F1 11 Tf
+1 0 0 1 50 492 Tm
+(7. vote is recorded) Tj
+/F1 11 Tf
+1 0 0 1 50 476 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 460 Tm
+(`frontend/src/pages/Admin.js`) Tj
+/F1 11 Tf
+1 0 0 1 50 442 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 426 Tm
+(This is the admin page.) Tj
+/F1 11 Tf
+1 0 0 1 50 410 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 394 Tm
+(Admin can:) Tj
+/F1 11 Tf
+1 0 0 1 50 378 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 362 Tm
+(- add voters) Tj
+/F1 11 Tf
+1 0 0 1 50 346 Tm
+(- upload voter photos) Tj
+/F1 11 Tf
+1 0 0 1 50 330 Tm
+(- delete voters) Tj
+/F1 11 Tf
+1 0 0 1 50 314 Tm
+(- add booths) Tj
+/F1 11 Tf
+1 0 0 1 50 298 Tm
+(- search voter data) Tj
+/F1 11 Tf
+1 0 0 1 50 282 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 266 Tm
+(`frontend/src/pages/Dashboard.js`) Tj
+/F1 11 Tf
+1 0 0 1 50 248 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 232 Tm
+(Shows election statistics like:) Tj
+/F1 11 Tf
+1 0 0 1 50 216 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 200 Tm
+(- total registered voters) Tj
+/F1 11 Tf
+1 0 0 1 50 184 Tm
+(- number of votes cast) Tj
+/F1 11 Tf
+1 0 0 1 50 168 Tm
+(- number of voters remaining) Tj
+/F1 11 Tf
+1 0 0 1 50 152 Tm
+(- turnout percentage) Tj
+/F1 11 Tf
+1 0 0 1 50 136 Tm
+(- recent votes) Tj
+/F1 11 Tf
+1 0 0 1 50 120 Tm
+(- anomalies) Tj
+/F1 11 Tf
+1 0 0 1 50 104 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 88 Tm
+(`frontend/src/pages/BoothAllocation.js`) Tj
+/F1 11 Tf
+1 0 0 1 50 70 Tm
+() Tj
+/F1 10 Tf
+1 0 0 1 475 25 Tm
+(Page 8 of 13) Tj
+ET
+endstream
+endobj
+11 0 obj
+<< /Length 2436 >>
+stream
+BT
+/F1 11 Tf
+1 0 0 1 50 782 Tm
+(Used for booth mapping management.) Tj
+/F1 11 Tf
+1 0 0 1 50 766 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 750 Tm
+(Admin can:) Tj
+/F1 11 Tf
+1 0 0 1 50 734 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 718 Tm
+(- manually create booth mappings) Tj
+/F1 11 Tf
+1 0 0 1 50 702 Tm
+(- auto-generate booth mappings from voter addresses) Tj
+/F1 11 Tf
+1 0 0 1 50 686 Tm
+(- view and delete mappings) Tj
+/F1 11 Tf
+1 0 0 1 50 670 Tm
+() Tj
+/F2 14 Tf
+1 0 0 1 50 654 Tm
+(10. Frontend Components) Tj
+/F1 11 Tf
+1 0 0 1 50 632 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 616 Tm
+(Voter Components) Tj
+/F1 11 Tf
+1 0 0 1 50 598 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 582 Tm
+(- `AuthForm.js`) Tj
+/F1 11 Tf
+1 0 0 1 50 566 Tm
+(  - takes voter ID, Aadhaar, and phone number) Tj
+/F1 11 Tf
+1 0 0 1 50 550 Tm
+(- `GovernmentVerification.js`) Tj
+/F1 11 Tf
+1 0 0 1 50 534 Tm
+(  - calls backend for ID verification) Tj
+/F1 11 Tf
+1 0 0 1 50 518 Tm
+(- `FaceVerification.js`) Tj
+/F1 11 Tf
+1 0 0 1 50 502 Tm
+(  - opens webcam and captures live face image) Tj
+/F1 11 Tf
+1 0 0 1 50 486 Tm
+(- `OTPVerification.js`) Tj
+/F1 11 Tf
+1 0 0 1 50 470 Tm
+(  - takes OTP input) Tj
+/F1 11 Tf
+1 0 0 1 50 454 Tm
+(- `VotingStatus.js`) Tj
+/F1 11 Tf
+1 0 0 1 50 438 Tm
+(  - shows voter status and allows vote recording) Tj
+/F1 11 Tf
+1 0 0 1 50 422 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 406 Tm
+(Admin Components) Tj
+/F1 11 Tf
+1 0 0 1 50 388 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 372 Tm
+(- `AddVoterForm.js`) Tj
+/F1 11 Tf
+1 0 0 1 50 356 Tm
+(  - form to add a voter with address, booth, and photo) Tj
+/F1 11 Tf
+1 0 0 1 50 340 Tm
+(- `AddBoothForm.js`) Tj
+/F1 11 Tf
+1 0 0 1 50 324 Tm
+(  - form to create polling booth) Tj
+/F1 11 Tf
+1 0 0 1 50 308 Tm
+(- `VoterTable.js`) Tj
+/F1 11 Tf
+1 0 0 1 50 292 Tm
+(  - shows all voter records in table format) Tj
+/F1 11 Tf
+1 0 0 1 50 276 Tm
+(- `DeleteConfirmDialog.js`) Tj
+/F1 11 Tf
+1 0 0 1 50 260 Tm
+(  - delete confirmation popup) Tj
+/F1 11 Tf
+1 0 0 1 50 244 Tm
+() Tj
+/F2 14 Tf
+1 0 0 1 50 228 Tm
+(11. Database Collections) Tj
+/F1 11 Tf
+1 0 0 1 50 206 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 190 Tm
+(Main collections used:) Tj
+/F1 11 Tf
+1 0 0 1 50 174 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 158 Tm
+(- `voters`) Tj
+/F1 11 Tf
+1 0 0 1 50 142 Tm
+(- `booths`) Tj
+/F1 11 Tf
+1 0 0 1 50 126 Tm
+(- `anomalies`) Tj
+/F1 11 Tf
+1 0 0 1 50 110 Tm
+(- `locality_booth_mapping`) Tj
+/F1 11 Tf
+1 0 0 1 50 94 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 78 Tm
+(Voter images are stored using GridFS.) Tj
+/F1 10 Tf
+1 0 0 1 475 25 Tm
+(Page 9 of 13) Tj
+ET
+endstream
+endobj
+12 0 obj
+<< /Length 2109 >>
+stream
+BT
+/F1 11 Tf
+1 0 0 1 50 782 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 766 Tm
+(Typical voter record includes:) Tj
+/F1 11 Tf
+1 0 0 1 50 750 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 734 Tm
+(- voter ID) Tj
+/F1 11 Tf
+1 0 0 1 50 718 Tm
+(- Aadhaar number) Tj
+/F1 11 Tf
+1 0 0 1 50 702 Tm
+(- phone number) Tj
+/F1 11 Tf
+1 0 0 1 50 686 Tm
+(- full name) Tj
+/F1 11 Tf
+1 0 0 1 50 670 Tm
+(- date of birth) Tj
+/F1 11 Tf
+1 0 0 1 50 654 Tm
+(- age) Tj
+/F1 11 Tf
+1 0 0 1 50 638 Tm
+(- address) Tj
+/F1 11 Tf
+1 0 0 1 50 622 Tm
+(- constituency) Tj
+/F1 11 Tf
+1 0 0 1 50 606 Tm
+(- polling station) Tj
+/F1 11 Tf
+1 0 0 1 50 590 Tm
+(- has voted status) Tj
+/F1 11 Tf
+1 0 0 1 50 574 Tm
+(- voting timestamp) Tj
+/F1 11 Tf
+1 0 0 1 50 558 Tm
+(- OTP code) Tj
+/F1 11 Tf
+1 0 0 1 50 542 Tm
+(- OTP expiry) Tj
+/F1 11 Tf
+1 0 0 1 50 526 Tm
+(- image ID) Tj
+/F1 11 Tf
+1 0 0 1 50 510 Tm
+() Tj
+/F2 14 Tf
+1 0 0 1 50 494 Tm
+(12. Complete Voter Workflow) Tj
+/F1 11 Tf
+1 0 0 1 50 472 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 456 Tm
+(Step 1: Enter credentials) Tj
+/F1 11 Tf
+1 0 0 1 50 438 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 422 Tm
+(The voter enters:) Tj
+/F1 11 Tf
+1 0 0 1 50 406 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 390 Tm
+(- voter ID) Tj
+/F1 11 Tf
+1 0 0 1 50 374 Tm
+(- Aadhaar number) Tj
+/F1 11 Tf
+1 0 0 1 50 358 Tm
+(- phone number) Tj
+/F1 11 Tf
+1 0 0 1 50 342 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 326 Tm
+(Step 2: Government verification) Tj
+/F1 11 Tf
+1 0 0 1 50 308 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 292 Tm
+(The system simulates verification with:) Tj
+/F1 11 Tf
+1 0 0 1 50 276 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 260 Tm
+(- UIDAI for Aadhaar) Tj
+/F1 11 Tf
+1 0 0 1 50 244 Tm
+(- Election Commission for voter ID) Tj
+/F1 11 Tf
+1 0 0 1 50 228 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 212 Tm
+(Step 3: Face verification) Tj
+/F1 11 Tf
+1 0 0 1 50 194 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 178 Tm
+(The voter captures a live webcam photo.) Tj
+/F1 11 Tf
+1 0 0 1 50 162 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 146 Tm
+(Backend compares:) Tj
+/F1 11 Tf
+1 0 0 1 50 130 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 114 Tm
+(- stored voter image) Tj
+/F1 11 Tf
+1 0 0 1 50 98 Tm
+(- live captured image) Tj
+/F1 11 Tf
+1 0 0 1 50 82 Tm
+() Tj
+/F1 10 Tf
+1 0 0 1 475 25 Tm
+(Page 10 of 13) Tj
+ET
+endstream
+endobj
+13 0 obj
+<< /Length 2163 >>
+stream
+BT
+/F2 12 Tf
+1 0 0 1 50 782 Tm
+(Step 4: OTP generation) Tj
+/F1 11 Tf
+1 0 0 1 50 764 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 748 Tm
+(If face verification passes, backend:) Tj
+/F1 11 Tf
+1 0 0 1 50 732 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 716 Tm
+(- generates OTP) Tj
+/F1 11 Tf
+1 0 0 1 50 700 Tm
+(- stores OTP in MongoDB) Tj
+/F1 11 Tf
+1 0 0 1 50 684 Tm
+(- sends SMS using Twilio or console simulation) Tj
+/F1 11 Tf
+1 0 0 1 50 668 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 652 Tm
+(Step 5: OTP verification) Tj
+/F1 11 Tf
+1 0 0 1 50 634 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 618 Tm
+(The voter enters the OTP.) Tj
+/F1 11 Tf
+1 0 0 1 50 602 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 586 Tm
+(Backend checks:) Tj
+/F1 11 Tf
+1 0 0 1 50 570 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 554 Tm
+(- whether OTP matches) Tj
+/F1 11 Tf
+1 0 0 1 50 538 Tm
+(- whether OTP expired) Tj
+/F1 11 Tf
+1 0 0 1 50 522 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 506 Tm
+(Step 6: Vote recording) Tj
+/F1 11 Tf
+1 0 0 1 50 488 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 472 Tm
+(If OTP is correct, the voter can record a vote.) Tj
+/F1 11 Tf
+1 0 0 1 50 456 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 440 Tm
+(Backend updates:) Tj
+/F1 11 Tf
+1 0 0 1 50 424 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 408 Tm
+(- `has_voted = True`) Tj
+/F1 11 Tf
+1 0 0 1 50 392 Tm
+(- `voting_timestamp`) Tj
+/F1 11 Tf
+1 0 0 1 50 376 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 360 Tm
+(Then a confirmation SMS is sent.) Tj
+/F1 11 Tf
+1 0 0 1 50 344 Tm
+() Tj
+/F2 14 Tf
+1 0 0 1 50 328 Tm
+(13. Complete Admin Workflow) Tj
+/F1 11 Tf
+1 0 0 1 50 306 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 290 Tm
+(Add voter) Tj
+/F1 11 Tf
+1 0 0 1 50 272 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 256 Tm
+(Admin enters voter details and uploads photo.) Tj
+/F1 11 Tf
+1 0 0 1 50 240 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 224 Tm
+(Backend:) Tj
+/F1 11 Tf
+1 0 0 1 50 208 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 192 Tm
+(- validates fields) Tj
+/F1 11 Tf
+1 0 0 1 50 176 Tm
+(- checks duplicates) Tj
+/F1 11 Tf
+1 0 0 1 50 160 Tm
+(- validates photo) Tj
+/F1 11 Tf
+1 0 0 1 50 144 Tm
+(- stores image in GridFS) Tj
+/F1 11 Tf
+1 0 0 1 50 128 Tm
+(- stores voter record in MongoDB) Tj
+/F1 11 Tf
+1 0 0 1 50 112 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 96 Tm
+(Delete voter) Tj
+/F1 11 Tf
+1 0 0 1 50 78 Tm
+() Tj
+/F1 10 Tf
+1 0 0 1 475 25 Tm
+(Page 11 of 13) Tj
+ET
+endstream
+endobj
+14 0 obj
+<< /Length 2335 >>
+stream
+BT
+/F1 11 Tf
+1 0 0 1 50 782 Tm
+(Admin can delete voter record and associated image.) Tj
+/F1 11 Tf
+1 0 0 1 50 766 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 750 Tm
+(Add booth) Tj
+/F1 11 Tf
+1 0 0 1 50 732 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 716 Tm
+(Admin creates booth records for polling stations.) Tj
+/F1 11 Tf
+1 0 0 1 50 700 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 684 Tm
+(Smart booth allocation) Tj
+/F1 11 Tf
+1 0 0 1 50 666 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 650 Tm
+(Admin can auto-fill booth assignment based on locality found in address.) Tj
+/F1 11 Tf
+1 0 0 1 50 634 Tm
+() Tj
+/F2 14 Tf
+1 0 0 1 50 618 Tm
+(14. Dashboard Workflow) Tj
+/F1 11 Tf
+1 0 0 1 50 596 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 580 Tm
+(Dashboard fetches data from backend and displays:) Tj
+/F1 11 Tf
+1 0 0 1 50 564 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 548 Tm
+(- total voters) Tj
+/F1 11 Tf
+1 0 0 1 50 532 Tm
+(- total voted) Tj
+/F1 11 Tf
+1 0 0 1 50 516 Tm
+(- turnout percentage) Tj
+/F1 11 Tf
+1 0 0 1 50 500 Tm
+(- recent votes) Tj
+/F1 11 Tf
+1 0 0 1 50 484 Tm
+(- anomaly results) Tj
+/F1 11 Tf
+1 0 0 1 50 468 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 452 Tm
+(It can also run AI-style anomaly detection.) Tj
+/F1 11 Tf
+1 0 0 1 50 436 Tm
+() Tj
+/F2 14 Tf
+1 0 0 1 50 420 Tm
+(15. Booth Allocation Workflow) Tj
+/F1 11 Tf
+1 0 0 1 50 398 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 382 Tm
+(This module maps localities to polling booths.) Tj
+/F1 11 Tf
+1 0 0 1 50 366 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 350 Tm
+(It supports:) Tj
+/F1 11 Tf
+1 0 0 1 50 334 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 318 Tm
+(- manual mapping) Tj
+/F1 11 Tf
+1 0 0 1 50 302 Tm
+(- automatic booth assignment) Tj
+/F1 11 Tf
+1 0 0 1 50 286 Tm
+(- auto-generation of mappings from voter addresses) Tj
+/F1 11 Tf
+1 0 0 1 50 270 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 254 Tm
+(This helps reduce manual booth assignment work.) Tj
+/F1 11 Tf
+1 0 0 1 50 238 Tm
+() Tj
+/F2 14 Tf
+1 0 0 1 50 222 Tm
+(16. Seed Script) Tj
+/F1 11 Tf
+1 0 0 1 50 200 Tm
+() Tj
+/F2 12 Tf
+1 0 0 1 50 184 Tm
+(`backend/seed_database.py`) Tj
+/F1 11 Tf
+1 0 0 1 50 166 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 150 Tm
+(This script fills MongoDB with fake voter data for testing.) Tj
+/F1 11 Tf
+1 0 0 1 50 134 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 118 Tm
+(It:) Tj
+/F1 11 Tf
+1 0 0 1 50 102 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 86 Tm
+(- creates fake voters) Tj
+/F1 11 Tf
+1 0 0 1 50 70 Tm
+(- assigns random constituencies and booths) Tj
+/F1 10 Tf
+1 0 0 1 475 25 Tm
+(Page 12 of 13) Tj
+ET
+endstream
+endobj
+15 0 obj
+<< /Length 2421 >>
+stream
+BT
+/F1 11 Tf
+1 0 0 1 50 782 Tm
+(- marks some voters as already voted) Tj
+/F1 11 Tf
+1 0 0 1 50 766 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 750 Tm
+(This is useful for demo and dashboard testing.) Tj
+/F1 11 Tf
+1 0 0 1 50 734 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 718 Tm
+(Note: this script uses `Faker`, which is not currently listed in) Tj
+/F1 11 Tf
+1 0 0 1 50 702 Tm
+(`backend/requirements.txt`.) Tj
+/F1 11 Tf
+1 0 0 1 50 686 Tm
+() Tj
+/F2 14 Tf
+1 0 0 1 50 670 Tm
+(17. Strengths of the Project) Tj
+/F1 11 Tf
+1 0 0 1 50 648 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 632 Tm
+(- good full-stack architecture) Tj
+/F1 11 Tf
+1 0 0 1 50 616 Tm
+(- clear separation of frontend and backend) Tj
+/F1 11 Tf
+1 0 0 1 50 600 Tm
+(- strong demo features) Tj
+/F1 11 Tf
+1 0 0 1 50 584 Tm
+(- includes AI/face verification concept) Tj
+/F1 11 Tf
+1 0 0 1 50 568 Tm
+(- includes admin tools) Tj
+/F1 11 Tf
+1 0 0 1 50 552 Tm
+(- includes booth allocation) Tj
+/F1 11 Tf
+1 0 0 1 50 536 Tm
+(- includes dashboard analytics) Tj
+/F1 11 Tf
+1 0 0 1 50 520 Tm
+() Tj
+/F2 14 Tf
+1 0 0 1 50 504 Tm
+(18. Current Nature of the Project) Tj
+/F1 11 Tf
+1 0 0 1 50 482 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 466 Tm
+(This looks like a student/demo project that is still evolving.) Tj
+/F1 11 Tf
+1 0 0 1 50 450 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 434 Tm
+(Reasons:) Tj
+/F1 11 Tf
+1 0 0 1 50 418 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 402 Tm
+(- some older commented code still exists) Tj
+/F1 11 Tf
+1 0 0 1 50 386 Tm
+(- some routes overlap in responsibility) Tj
+/F1 11 Tf
+1 0 0 1 50 370 Tm
+(- some response formats are slightly inconsistent between frontend and backend) Tj
+/F1 11 Tf
+1 0 0 1 50 354 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 338 Tm
+(Still, the overall idea and implementation are strong and useful for presentation, demo,) Tj
+/F1 11 Tf
+1 0 0 1 50 322 Tm
+(or minor project explanation.) Tj
+/F1 11 Tf
+1 0 0 1 50 306 Tm
+() Tj
+/F2 14 Tf
+1 0 0 1 50 290 Tm
+(19. Final Summary) Tj
+/F1 11 Tf
+1 0 0 1 50 268 Tm
+() Tj
+/F1 11 Tf
+1 0 0 1 50 252 Tm
+(This project is a smart digital voter authentication platform built using React, Flask,) Tj
+/F1 11 Tf
+1 0 0 1 50 236 Tm
+(and MongoDB. It verifies a voter through credential matching, simulated government ID) Tj
+/F1 11 Tf
+1 0 0 1 50 220 Tm
+(checks, face verification, and OTP verification. It also provides admin management,) Tj
+/F1 11 Tf
+1 0 0 1 50 204 Tm
+(booth mapping, dashboard analytics, and anomaly detection in one integrated system.) Tj
+/F1 10 Tf
+1 0 0 1 475 25 Tm
+(Page 13 of 13) Tj
+ET
+endstream
+endobj
+16 0 obj
+<< /Type /Page /Parent 29 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 3 0 R >>
+endobj
+17 0 obj
+<< /Type /Page /Parent 29 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 4 0 R >>
+endobj
+18 0 obj
+<< /Type /Page /Parent 29 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 5 0 R >>
+endobj
+19 0 obj
+<< /Type /Page /Parent 29 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 6 0 R >>
+endobj
+20 0 obj
+<< /Type /Page /Parent 29 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 7 0 R >>
+endobj
+21 0 obj
+<< /Type /Page /Parent 29 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 8 0 R >>
+endobj
+22 0 obj
+<< /Type /Page /Parent 29 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 9 0 R >>
+endobj
+23 0 obj
+<< /Type /Page /Parent 29 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 10 0 R >>
+endobj
+24 0 obj
+<< /Type /Page /Parent 29 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 11 0 R >>
+endobj
+25 0 obj
+<< /Type /Page /Parent 29 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 12 0 R >>
+endobj
+26 0 obj
+<< /Type /Page /Parent 29 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 13 0 R >>
+endobj
+27 0 obj
+<< /Type /Page /Parent 29 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 14 0 R >>
+endobj
+28 0 obj
+<< /Type /Page /Parent 29 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 15 0 R >>
+endobj
+29 0 obj
+<< /Type /Pages /Kids [16 0 R 17 0 R 18 0 R 19 0 R 20 0 R 21 0 R 22 0 R 23 0 R 24 0 R 25 0 R 26 0 R 27 0 R 28 0 R] /Count 13 >>
+endobj
+30 0 obj
+<< /Type /Catalog /Pages 29 0 R >>
+endobj
+xref
+0 31
+0000000000 65535 f 
+0000000015 00000 n 
+0000000085 00000 n 
+0000000160 00000 n 
+0000002695 00000 n 
+0000004878 00000 n 
+0000007088 00000 n 
+0000009372 00000 n 
+0000011687 00000 n 
+0000014091 00000 n 
+0000016367 00000 n 
+0000018757 00000 n 
+0000021246 00000 n 
+0000023408 00000 n 
+0000025624 00000 n 
+0000028012 00000 n 
+0000030486 00000 n 
+0000030624 00000 n 
+0000030762 00000 n 
+0000030900 00000 n 
+0000031038 00000 n 
+0000031176 00000 n 
+0000031314 00000 n 
+0000031452 00000 n 
+0000031591 00000 n 
+0000031730 00000 n 
+0000031869 00000 n 
+0000032008 00000 n 
+0000032147 00000 n 
+0000032286 00000 n 
+0000032430 00000 n 
+trailer
+<< /Size 31 /Root 30 0 R >>
+startxref
+32481
+%%EOF

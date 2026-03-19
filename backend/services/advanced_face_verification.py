@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-from deepface import DeepFace
 import base64
 from io import BytesIO
 from PIL import Image
@@ -9,6 +8,13 @@ import requests
 class AdvancedFaceVerification:
     def __init__(self):
         print("[OK] Advanced Face Verification initialized")
+
+    def _load_deepface(self):
+        # Import DeepFace only when face verification is requested so the API can boot
+        # without loading the full TensorFlow stack on startup.
+        from deepface import DeepFace
+
+        return DeepFace
     
     def detect_anti_spoof(self, image):
         """Detect photo/screen spoofing"""
@@ -110,6 +116,7 @@ class AdvancedFaceVerification:
         # Face verification with DeepFace
         try:
             print("[INFO] Running DeepFace verification...")
+            DeepFace = self._load_deepface()
             result = DeepFace.verify(
                 stored_cv, 
                 live_cv,

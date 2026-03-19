@@ -41,11 +41,11 @@ app.mongo = mongo # Make mongo accessible in blueprints via current_app
 # This organizes the routes into separate files for better maintainability
 app.register_blueprint(auth_bp, url_prefix='/api/auth')
 app.register_blueprint(admin_bp, url_prefix='/api/admin')
-app.register_blueprint(data_bp, url_prefix='/api') # For dashboard and AI routes
+app.register_blueprint(data_bp, url_prefix='/api/data') # For dashboard and AI routes
 app.register_blueprint(gov_verify_bp, url_prefix='/api/auth')
 app.register_blueprint(image_bp, url_prefix='/api/admin')
 app.register_blueprint(booth_allocation_bp, url_prefix='/api/booth-allocation') 
-app.register_blueprint(anomaly_bp, url_prefix="/api")
+app.register_blueprint(anomaly_bp, url_prefix="/api/data/ai")
 # app.register_blueprint(data_bp)
 #Root Route 
 @app.route('/')
@@ -55,7 +55,7 @@ def index():
 
 #Main Execution
 if __name__ == '__main__':
-    # Runs the Flask app in debug mode
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    # Disable the reloader on Windows so heavyweight ML imports do not run twice.
+    app.run(debug=True, use_reloader=False, host='0.0.0.0', port=5000)
     #venv\Scripts\activate
     #pip install -r requirements.txt

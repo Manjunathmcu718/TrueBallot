@@ -559,10 +559,10 @@ const [otpForTesting, setOtpForTesting] = useState(null);
                 </AlertDescription>
               </Alert> 
                */}
-              <div className="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-lg text-sm">
+              {/* <div className="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-lg text-sm">
   <strong>Testing Mode:</strong> {fakeVoters.length} fake voters generated automatically.
   <br />Check browser console (F12) for test credentials.
-</div>
+</div> */}
             </motion.div>
           )}
         </header>

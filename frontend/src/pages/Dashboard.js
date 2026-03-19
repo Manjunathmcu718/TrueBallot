@@ -23,8 +23,9 @@ const Dashboard = () => {
         setIsLoading(true);
         try {
             const [statsResponse, anomaliesResponse] = await Promise.all([
-                axios.get('http://localhost:5000/api/dashboard/stats'),
-                axios.get('http://localhost:5000/api/ai/anomalies')
+                // axios.get('http://localhost:5000/api/dashboard/stats'),
+                axios.get('http://localhost:5000/api/data/dashboard/stats'),
+                axios.get('http://localhost:5000/api/data/ai/anomalies')
             ]);
             
             setStats(statsResponse.data);
@@ -38,7 +39,7 @@ const Dashboard = () => {
     const runAIDetection = async () => {
         setIsDetecting(true);
         try {
-            await axios.post('http://localhost:5000/api/ai/detect-anomalies');
+            await axios.post('http://localhost:5000/api/data/ai/detect-anomalies');
             await loadData(); // Reload data after detection
         } catch (error) {
             console.error('AI detection failed:', error);
