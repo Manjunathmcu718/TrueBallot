@@ -1,3 +1,4 @@
+import VoterAnalysis from '../components/VoterAnalysis';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
@@ -214,6 +215,7 @@ const Dashboard = () => {
                             </div>
                         </motion.div>
                     )}
+                    
 
                     {/* AI Anomaly Detection Results */}
                     <motion.div
@@ -254,8 +256,25 @@ const Dashboard = () => {
                         </div>
                     </motion.div>
                 </div>
+                {/* Voter Analysis Section */}
+<motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    className="mt-12"
+>
+    <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+        <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+            <Brain className="w-5 h-5 text-purple-600" />
+            AI Voter Analysis
+        </h3>
+
+        <VoterAnalysis />
+    </div>
+</motion.div>
+{/* ✅ CORRECT POSITION */}
             </div>
         </div>
+        
     );
 };
 

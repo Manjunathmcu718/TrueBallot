@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Shield, Clock, Info } from 'lucide-react';
+import { ArrowLeft, Shield, Clock, Send } from 'lucide-react';
 
-const OTPVerification = ({ voterData, onVerify, onBack, isLoading }) => {
+const OTPVerification = ({ voterData, phoneNumber, smsStatus, onVerify, onBack, isLoading }) => {
     const [otp, setOtp] = useState('');
     const [timeLeft, setTimeLeft] = useState(300); // 5 minutes
     const inputRef = useRef(null);
@@ -26,7 +26,8 @@ const OTPVerification = ({ voterData, onVerify, onBack, isLoading }) => {
         onVerify(otp);
     };
 
-    const maskedPhone = `******${voterData?.message?.slice(-4) || '****'}`;
+    const message = voterData?.message || smsStatus?.message || 'Enter the OTP sent to your phone';
+    const maskedPhone = phoneNumber ? `******${String(phoneNumber).slice(-4)}` : '';
 
     return (
         <motion.div
@@ -38,28 +39,19 @@ const OTPVerification = ({ voterData, onVerify, onBack, isLoading }) => {
             <div className="bg-white/95 backdrop-blur-sm rounded-xl shadow-2xl p-8 border border-gray-200">
                 <div className="text-center mb-6">
                     <h2 className="text-2xl font-bold text-gray-800">OTP Verification</h2>
-                    <p className="text-gray-600 mt-2">{voterData?.message || 'Enter the OTP sent to your phone'}</p>
+                    <p className="text-gray-600 mt-2">{message}</p>
+                    {maskedPhone && (
+                        <p className="text-sm text-gray-500 mt-1 flex items-center justify-center gap-2">
+                            <Send className="w-4 h-4" />
+                            {maskedPhone}
+                        </p>
+                    )}
                 </div>
-
-                {/* Testing Notice */}
-                {voterData?.otp_for_testing && (
-                    <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-md mb-6">
-                        <div className="flex">
-                            <Info className="h-5 w-5 text-yellow-400 mr-3 mt-0.5" />
-                            <div>
-                                <p className="font-bold text-yellow-800">For Testing</p>
-                                <p className="text-sm text-yellow-700">
-                                    OTP: <span className="font-mono font-bold">{voterData.otp_for_testing}</span>
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                )}
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                     <div className="space-y-2">
                         <input
-                            ref__={inputRef}
+                            ref={inputRef}
                             type="text"
                             value={otp}
                             onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}

@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Voter Analysis</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+  />
+  <style>
+    body { background: #f8f9fa; }
+    .tab-btn { cursor: pointer; transition: all 0.2s; }
+    .tab-btn.active-voted { background: #198754; color: white; }
+    .tab-btn.active-not-voted { background: #dc3545; color: white; }
+    .tab-btn.active-anomaly { background: #ffc107; color: #212529; }
+    .count-badge { font-size: 2rem; font-weight: bold; }
+    .anomaly-tag {
+      background: #fff3cd;
+      color: #856404;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-4">
+    <a class="navbar-brand fw-bold" href="/">AI VoterAuth</a>
+    <div class="navbar-nav ms-auto">
+      <a class="nav-link" href="/voter-auth">Voter Login</a>
+      <a class="nav-link" href="/dashboard">Dashboard</a>
+      <a class="nav-link" href="/fraud-detection">AI Fraud Detection</a>
+      <a class="nav-link" href="/data-cleaning">Data Cleaning</a>
+      <a class="nav-link active fw-bold text-warning" href="/voter-analysis">Analysis</a>
+      <a class="nav-link" href="/admin">Admin</a>
+    </div>
+  </nav>
+
+  <div class="container py-5">
+    <h2 class="fw-bold mb-4">Voter Category Analysis</h2>
+
+    <div class="row g-4 mb-5" id="summaryCards">
+      <div class="col-md-4">
+        <div class="card text-center shadow-sm tab-btn" id="btn-voted" onclick="showTab('voted')">
+          <div class="card-body py-4">
+            <div class="text-success mb-1">OK</div>
+            <div class="count-badge text-success" id="count-voted">-</div>
+            <div class="fw-semibold text-success mt-1">VOTED</div>
+            <small class="text-muted">Unique / Verified / Location Matched</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-center shadow-sm tab-btn" id="btn-not_voted" onclick="showTab('not_voted')">
+          <div class="card-body py-4">
+            <div class="text-danger mb-1">NO</div>
+            <div class="count-badge text-danger" id="count-not_voted">-</div>
+            <div class="fw-semibold text-danger mt-1">NOT VOTED</div>
+            <small class="text-muted">Unique / Verified / Location Mismatch</small>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-center shadow-sm tab-btn" id="btn-anomaly" onclick="showTab('anomaly')">
+          <div class="card-body py-4">
+            <div class="text-warning mb-1">!</div>
+            <div class="count-badge text-warning" id="count-anomaly">-</div>
+            <div class="fw-semibold text-warning mt-1">ANOMALY</div>
+            <small class="text-muted">Duplicate or Unverified</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="tabDescription" class="alert mb-4"></div>
+
+    <div class="card shadow-sm">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0" id="voterTable">
+            <thead class="table-light" id="tableHead"></thead>
+            <tbody id="tableBody">
+              <tr><td colspan="6" class="text-center py-5 text-muted">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let analysisData = {};
+    let currentTab = "voted";
+
+    const descriptions = {
+      voted: "Voters with unique and verified details whose current location matches their assigned booth.",
+      not_voted: "Voters with unique and verified details but current location does not match their assigned booth.",
+      anomaly: "Voters with duplicate or unverified details flagged for investigation."
+    };
+
+    const alertClasses = {
+      voted: "alert-success",
+      not_voted: "alert-danger",
+      anomaly: "alert-warning"
+    };
+
+    async function loadData() {
+      const body = document.getElementById("tableBody");
+
+      try {
+        const response = await fetch("/api/voter-analysis");
+        if (!response.ok) {
+          throw new Error("Failed to fetch analysis data");
+        }
+
+        const data = await response.json();
+        analysisData = data;
+
+        document.getElementById("count-voted").textContent = data.counts.voted;
+        document.getElementById("count-not_voted").textContent = data.counts.not_voted;
+        document.getElementById("count-anomaly").textContent = data.counts.anomaly;
+
+        showTab("voted");
+      } catch (error) {
+        body.innerHTML = "<tr><td colspan=\"6\" class=\"text-center py-5 text-danger\">Unable to load voter analysis.</td></tr>";
+      }
+    }
+
+    function showTab(tab) {
+      currentTab = tab;
+
+      ["voted", "not_voted", "anomaly"].forEach((item) => {
+        document
+          .getElementById("btn-" + item)
+          .classList.remove("active-voted", "active-not-voted", "active-anomaly");
+      });
+
+      const activeMap = {
+        voted: "active-voted",
+        not_voted: "active-not-voted",
+        anomaly: "active-anomaly"
+      };
+
+      document.getElementById("btn-" + tab).classList.add(activeMap[tab]);
+
+      const desc = document.getElementById("tabDescription");
+      desc.className = "alert mb-4 " + alertClasses[tab];
+      desc.textContent = descriptions[tab];
+
+      const voters = analysisData[tab] || [];
+      const head = document.getElementById("tableHead");
+      const body = document.getElementById("tableBody");
+
+      let headHtml = "<tr><th>#</th><th>Name</th><th>Voter ID</th><th>Polling Station</th><th>Current Location</th>";
+      if (tab === "anomaly") {
+        headHtml += "<th>Issue</th>";
+      }
+      if (tab === "voted") {
+        headHtml += "<th>Voted At</th>";
+      }
+      headHtml += "</tr>";
+      head.innerHTML = headHtml;
+
+      const columnCount = tab === "not_voted" ? 5 : 6;
+
+      if (voters.length === 0) {
+        body.innerHTML = "<tr><td colspan=\"" + columnCount + "\" class=\"text-center py-5 text-muted\">No voters in this category</td></tr>";
+        return;
+      }
+
+      body.innerHTML = voters.map((voter, index) => {
+        let extra = "";
+        if (tab === "anomaly") {
+          extra = "<td><span class=\"anomaly-tag\">" + (voter.anomaly_reason || "Flagged") + "</span></td>";
+        }
+        if (tab === "voted") {
+          extra = "<td class=\"text-muted small\">" + (voter.voting_timestamp ? new Date(voter.voting_timestamp).toLocaleString() : "-") + "</td>";
+        }
+
+        return "<tr>" +
+          "<td class=\"text-muted\">" + (index + 1) + "</td>" +
+          "<td class=\"fw-medium\">" + (voter.full_name || "-") + "</td>" +
+          "<td class=\"font-monospace small\">" + (voter.voter_id || "-") + "</td>" +
+          "<td>" + (voter.polling_station || voter.booth_address || "-") + "</td>" +
+          "<td>" + (voter.current_location || "<span class=\"text-muted fst-italic\">Not set</span>") + "</td>" +
+          extra +
+          "</tr>";
+      }).join("");
+    }
+
+    loadData();
+  </script>
+</body>
+</html>

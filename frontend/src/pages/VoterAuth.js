@@ -81,7 +81,7 @@ export default function VoterAuthPage() {
 // export default function VoterAuthPage() {
   // const [step, setStep] = useState(1); 
   const [voterIdForOTP, setVoterIdForOTP] = useState(null);
-const [otpForTesting, setOtpForTesting] = useState(null);
+const [otpSmsStatus, setOtpSmsStatus] = useState(null);
   const [voterData, setVoterData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -376,6 +376,8 @@ const [otpForTesting, setOtpForTesting] = useState(null);
   const resetFlow = () => {
     setStep(1);
     setVoterData(null);
+    setVoterIdForOTP(null);
+    setOtpSmsStatus(null);
     setIsFakeVoter(false);
     setError("");
     setIsLoading(false);
@@ -441,7 +443,7 @@ const [otpForTesting, setOtpForTesting] = useState(null);
         setStep(3);
       } else if (data.status === 'otp_sent') {
         setVoterIdForOTP(data.voter_id);
-        setOtpForTesting(data.otp_for_testing);
+        setOtpSmsStatus({ ...data.sms, message: data.message });
         setStep(2);
       }
     } catch (err) {
@@ -679,7 +681,7 @@ const [otpForTesting, setOtpForTesting] = useState(null);
             <OTPVerification 
               key="otp" 
               phoneNumber={formDataForGov?.phone_number || '******'}
-              otpForTesting={otpForTesting}
+              smsStatus={otpSmsStatus}
               onVerify={handleOTPVerify} 
               onBack={resetFlow}
               isLoading={isLoading} 

@@ -78,16 +78,35 @@ def authenticate_voter():
         {"$set": {"otp_code": otp, "otp_expires_at": expires_at}}
     )
 
-    send_sms(
+    sms_result = send_sms(
         voter['phone_number'],
         f"Your Voter Authentication OTP is {otp}. It is valid for 5 minutes."
     )
+
+    if not sms_result.get("success"):
+        mongo.db.voters.update_one(
+            {"_id": voter['_id']},
+            {"$unset": {"otp_code": "", "otp_expires_at": ""}}
+        )
+        return jsonify({
+            "error": f"OTP SMS was not sent: {sms_result.get('error', 'Unknown Twilio error')}",
+            "sms": {
+                "success": False,
+                "simulated": bool(sms_result.get("simulated")),
+                "to": sms_result.get("to")
+            }
+        }), 502
 
     return jsonify({
         "status": "otp_sent",
         "voter_id": str(voter['_id']),
         "message": f"OTP sent to mobile ending in ******{voter['phone_number'][-4:]}",
-        "otp_for_testing": otp
+        "sms": {
+            "success": True,
+            "simulated": False,
+            "to": sms_result.get("to"),
+            "sid": sms_result.get("sid")
+        }
     })
 @auth_bp.route('/verify-otp', methods=['POST'])
 def verify_otp():

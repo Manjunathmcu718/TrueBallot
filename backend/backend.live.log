@@ -1,0 +1,3 @@
+Warning: Twilio credentials not found in .env file. SMS will be printed to console.
+ * Serving Flask app 'app'
+ * Debug mode: on

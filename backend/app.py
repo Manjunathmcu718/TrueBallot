@@ -4,6 +4,7 @@ from flask import Flask
 from flask_cors import CORS
 from flask_pymongo import PyMongo
 from dotenv import load_dotenv
+from routes.analysis_routes import analysis_bp
 import os
 import sys
 
@@ -46,6 +47,7 @@ app.register_blueprint(gov_verify_bp, url_prefix='/api/auth')
 app.register_blueprint(image_bp, url_prefix='/api/admin')
 app.register_blueprint(booth_allocation_bp, url_prefix='/api/booth-allocation') 
 app.register_blueprint(anomaly_bp, url_prefix="/api/data/ai")
+app.register_blueprint(analysis_bp)
 # app.register_blueprint(data_bp)
 #Root Route 
 @app.route('/')

@@ -1,559 +1,1659 @@
-# AI Voter Authentication System
+# AI Voter Authentication System - Full Code Explanation
+
+## Purpose Of The Project
+This project is a full-stack AI Voter Authentication System. It helps an election admin register voters, upload voter photos, allocate voters to polling booths, authenticate voters, verify OTPs, compare faces, record votes, and monitor voting statistics/anomalies.
+
+The system has three main parts:
+
+- Backend: Flask API in `backend/`
+- Database: MongoDB running locally on `mongodb://127.0.0.1:27017/voter_auth_db`
+- Frontend: React app in `frontend/`
+
+## How The Project Runs
+The repository includes Windows batch scripts:
+
+- `start-mongodb.bat` starts MongoDB using `mongo-data-real` as the database folder.
+- `start-backend.bat` starts Flask on `http://127.0.0.1:5000`.
+- `start-frontend.bat` starts React on `http://localhost:3000`.
+- `run-project.bat` opens all three services.
+
+Example:
 
-## 1. Project Overview
+1. Run `run-project.bat`
+2. Open `http://localhost:3000`
+3. React calls Flask APIs at `http://localhost:5000`
+4. Flask reads/writes MongoDB collections such as `voters`, `booths`, `anomalies`, and `locality_booth_mapping`
+
+## Main User Flow
+1. Admin adds a booth.
+2. Admin adds a voter with Voter ID, Aadhaar, phone number, address, constituency, polling station, and optional photo.
+3. Voter enters Voter ID, Aadhaar, and phone number.
+4. Government ID verification is simulated.
+5. Face verification compares stored voter photo with live webcam photo.
+6. Backend sends an OTP through Twilio or reports SMS failure/simulation.
+7. Voter enters OTP.
+8. Voter records vote.
+9. Dashboard updates vote counts and anomaly reports.
 
-This project is an AI-based Voter Authentication System. Its purpose is to verify a voter before allowing vote recording. It combines identity checks, face verification, OTP verification, admin management, booth mapping, and dashboard analytics.
+## Backend Architecture
+The backend uses Flask blueprints. A blueprint is a group of related API routes kept in a separate file. `backend/app.py` connects all blueprints to the main Flask app.
 
-The project has three main parts:
+Registered API groups:
 
-- Frontend built with React
-- Backend built with Flask
-- Database built on MongoDB
+- `/api/auth`: voter authentication, OTP, vote recording, government verification
+- `/api/admin`: admin voter/booth management and image upload
+- `/api/data`: dashboard stats, voter export, basic anomaly APIs
+- `/api/data/ai`: advanced anomaly detection APIs
+- `/api/booth-allocation`: locality-to-booth mapping APIs
+- `/api/voter-analysis` and `/api/analysis/voter-categories`: voter analysis APIs
 
-## 2. Main Goal of the Project
+## Database Collections
+The code uses these MongoDB collections:
 
-The system is designed to:
+- `voters`: voter records, voting status, OTP fields, photo GridFS ID
+- `booths`: polling booth records
+- `anomalies`: detected anomaly records
+- `locality_booth_mapping`: locality names mapped to booth IDs
+- GridFS collections: stores uploaded voter photos
 
-- verify voter identity
-- validate government IDs
-- compare live face with stored voter photo
-- send OTP to the voter
-- record whether the voter has voted
-- help admin manage voters and booths
-- show dashboard statistics and possible fraud patterns
+Example voter document:
 
-## 3. Overall Architecture
+```json
+{
+  "voter_id": "ABC1234567",
+  "aadhar_number": "123456789012",
+  "phone_number": "9876543210",
+  "full_name": "Rahul Sharma",
+  "date_of_birth": "1998-05-20",
+  "address": "Keshav Nagar, Delhi",
+  "constituency": "Delhi Central",
+  "polling_station": "BOOTH001",
+  "age": 27,
+  "has_voted": false,
+  "image_id": "Mongo GridFS ObjectId"
+}
+```
 
-### Frontend
+# Root Files
 
-The frontend is in the `frontend` folder. It provides the user interface for:
+## README.md
+This is a very small project title file. It identifies the repository as `voter-auth-project`.
 
-- voter authentication
-- admin panel
-- election dashboard
-- booth allocation
+Example use:
 
-### Backend
+```text
+# voter-auth-project
+```
 
-The backend is in the `backend` folder. It handles:
+## run-project.bat
+This is the all-in-one launcher. It opens MongoDB, backend, and frontend in separate command windows.
 
-- API routes
-- database operations
-- image validation
-- face verification
-- OTP generation
-- SMS sending
-- anomaly detection
+Important code idea:
 
-### Database
+```bat
+start "Voter Auth MongoDB" cmd /k "%~dp0start-mongodb.bat"
+start "Voter Auth Backend" cmd /k "%~dp0start-backend.bat"
+start "Voter Auth Frontend" cmd /k "%~dp0start-frontend.bat"
+```
 
-MongoDB stores all project data such as:
+Explanation:
 
-- voters
-- booths
-- anomalies
-- locality-to-booth mappings
-- voter photos using GridFS
+- `%~dp0` means the folder where the batch file is located.
+- Each `start` command opens a separate terminal.
+- `cmd /k` keeps the terminal open so you can see logs.
 
-## 4. Frontend Technologies and Libraries
+## start-mongodb.bat
+This script starts the MongoDB server.
 
-Frontend dependencies are listed in `frontend/package.json`.
+Important code idea:
 
-### React
+```bat
+"%MONGOD%" --dbpath "%DBPATH%" --bind_ip 127.0.0.1 --port 27017
+```
 
-Used to build the UI.
+Explanation:
 
-### React Router DOM
+- `MONGOD` points to the installed MongoDB executable.
+- `DBPATH` points to `mongo-data-real`.
+- MongoDB listens only on local machine address `127.0.0.1`.
+- Logs are written to `backend/mongod.projectdata.log`.
 
-Used for page navigation between:
+Example:
 
-- Voter Login
-- Dashboard
-- Admin
-- Booth Allocation
+```text
+mongodb://127.0.0.1:27017/voter_auth_db
+```
 
-### Axios
+## start-backend.bat
+This script starts the Flask backend.
 
-Used for sending HTTP requests to the backend APIs.
+Important code idea:
 
-### Framer Motion
+```bat
+cd /d "%~dp0backend"
+"%~dp0.venv\Scripts\python.exe" app.py
+```
 
-Used for page and component animations.
+Explanation:
 
-### Lucide React
+- Changes directory into `backend`.
+- Uses the project virtual environment Python.
+- Starts `backend/app.py`.
+- Sets BLAS thread variables to `1` to keep heavy ML libraries lighter.
 
-Used for icons across the UI.
+## start-frontend.bat
+This script starts the React frontend.
 
-### Tailwind CSS
+Important code idea:
 
-Used for styling and layout design.
+```bat
+cd /d "%~dp0frontend"
+set "BROWSER=none"
+call npm start
+```
 
-## 5. Backend Technologies and Libraries
+Explanation:
 
-Backend dependencies are listed in `backend/requirements.txt`.
+- Changes directory into `frontend`.
+- Prevents React from automatically opening a browser.
+- Starts the development server on `http://localhost:3000`.
 
-### Flask
+## test.txt
+This is a simple test/plain text file. It is not used by the application logic.
 
-Main backend framework.
+# Backend Files
 
-### Flask-CORS
+## backend/app.py
+This is the backend entry point. It creates the Flask app, connects MongoDB, enables CORS, and registers all route blueprints.
 
-Allows frontend and backend to communicate from different ports.
+Important code:
 
-### Flask-PyMongo
+```python
+app = Flask(__name__)
+app.config["MONGO_URI"] = os.getenv("MONGO_URI", "mongodb://localhost:27017/voter_auth_db")
+CORS(app)
+mongo = PyMongo(app)
+app.mongo = mongo
+```
 
-Connects Flask with MongoDB.
+Explanation:
 
-### python-dotenv
+- `Flask(__name__)` creates the web server application.
+- `MONGO_URI` is read from `.env`; if missing, a local MongoDB URL is used.
+- `CORS(app)` allows the React app on port 3000 to call the Flask API on port 5000.
+- `app.mongo = mongo` makes MongoDB available inside blueprints through `current_app.mongo`.
 
-Loads environment variables such as MongoDB and Twilio credentials.
+Blueprint registration:
 
-### Twilio
+```python
+app.register_blueprint(auth_bp, url_prefix='/api/auth')
+app.register_blueprint(admin_bp, url_prefix='/api/admin')
+app.register_blueprint(data_bp, url_prefix='/api/data')
+```
 
-Used for OTP and confirmation SMS.
+Example:
 
-### Pillow
+- `auth_bp` has route `/authenticate`
+- Registered with `/api/auth`
+- Final URL becomes `/api/auth/authenticate`
 
-Used for image processing.
+Root route:
 
-### OpenCV
+```python
+@app.route('/')
+def index():
+    return {"status": "running", "message": "AI Voter Authentication Backend"}
+```
 
-Used for image validation and anti-spoofing checks.
+Example response:
 
-### DeepFace
+```json
+{
+  "status": "running",
+  "message": "AI Voter Authentication Backend"
+}
+```
 
-Used for face verification between stored and live voter images.
+## backend/.env and backend/.env.example
+These files store environment variables, especially MongoDB and Twilio settings.
 
-### NumPy
+Typical values:
 
-Used in image processing calculations.
+```env
+MONGO_URI=mongodb://127.0.0.1:27017/voter_auth_db
+TWILIO_ACCOUNT_SID=your_sid
+TWILIO_AUTH_TOKEN=your_token
+TWILIO_PHONE_NUMBER=+1234567890
+```
 
-### Requests
+Explanation:
 
-Used when image data needs to be fetched from a URL.
+- `.env` contains real local credentials and should not be shared publicly.
+- `.env.example` is a template showing what variables are required.
 
-### Pandas and Scikit-learn
+## backend/requirements.txt
+This file lists Python dependencies.
 
-Present in requirements, but not strongly used in the main active flow right now.
+Important packages:
 
-## 6. Important Backend Files
+- `Flask`: web API framework
+- `Flask-CORS`: allows frontend-backend communication
+- `Flask-PyMongo`: MongoDB integration
+- `python-dotenv`: loads `.env`
+- `twilio`: sends OTP SMS
+- `Pillow`: image processing
+- `opencv-python-headless`: image validation and anti-spoof checks
+- `deepface`: face recognition
+- `requests`: fetches remote images
 
-### `backend/app.py`
+Example install command:
 
-This is the main backend entry point.
+```bat
+pip install -r backend/requirements.txt
+```
 
-It:
+## backend/seed_database.py
+This script fills MongoDB with sample voters and booths using Faker/random data.
 
-- creates the Flask app
-- loads environment variables
-- connects MongoDB
-- enables CORS
-- registers route blueprints
+Important code idea:
 
-Blueprints registered:
+```python
+client = MongoClient(...)
+db = client["voter_auth_db"]
+```
 
-- auth routes
-- admin routes
-- data routes
-- government verification routes
-- image routes
-- booth allocation routes
-- anomaly routes
+Explanation:
 
-### `backend/routes/auth_routes.py`
+- Connects to MongoDB.
+- Creates realistic sample voter names, phone numbers, Aadhaar numbers, addresses, booths, and vote statuses.
+- Useful for demo and testing dashboard/anomaly features.
 
-This file handles voter authentication.
+Example generated voter:
 
-Main endpoints:
+```json
+{
+  "voter_id": "DEL1234567",
+  "aadhar_number": "987654321012",
+  "phone_number": "9876543210",
+  "has_voted": false
+}
+```
 
-- `/api/auth/authenticate`
-- `/api/auth/verify-otp`
-- `/api/auth/vote`
-- `/api/auth/compare-faces`
+## backend/routes/auth_routes.py
+This file handles voter login, OTP verification, vote recording, and face comparison.
 
-Responsibilities:
+### `authenticate_voter`
+Route:
 
-- match voter credentials from DB
-- check age eligibility
-- verify face using stored image and live image
-- create OTP
-- verify OTP
-- record vote
-- send SMS
+```text
+POST /api/auth/authenticate
+```
 
-### `backend/routes/admin_routes.py`
+What it does:
 
-This file handles admin operations.
+- Reads `voter_id`, `aadhar_number`, and `phone_number`.
+- Finds the matching voter in MongoDB.
+- Checks voter age.
+- Rejects under-18 voters.
+- If already voted, returns `already_voted`.
+- If live face image is provided, compares it with stored image.
+- Generates a 6-digit OTP.
+- Stores OTP and expiry time in MongoDB.
+- Sends OTP by SMS.
 
-Main features:
+Example request:
 
-- add voter
-- list voters
-- delete voter
-- add booth
-- list booths
-- upload and fetch voter image
+```json
+{
+  "voter_id": "ABC1234567",
+  "aadhar_number": "123456789012",
+  "phone_number": "9876543210",
+  "live_image_data": "data:image/jpeg;base64,..."
+}
+```
 
-It also validates:
+Example response:
 
-- voter ID format
-- Aadhaar format
-- phone number format
-- duplicate voter records
+```json
+{
+  "status": "otp_sent",
+  "voter_id": "mongo_object_id",
+  "message": "OTP sent to mobile ending in ******3210"
+}
+```
 
-### `backend/routes/data_routes.py`
+### `verify_otp`
+Route:
 
-This file provides dashboard and data APIs.
+```text
+POST /api/auth/verify-otp
+```
 
-It returns:
+What it does:
 
-- total voters
-- voted count
-- not voted count
-- recent votes
-- anomaly list
+- Finds voter by MongoDB `_id`.
+- Checks if OTP exists.
+- Checks whether OTP expired.
+- Compares user-entered OTP with stored OTP.
+- Removes OTP fields after success.
 
-It also has anomaly detection logic based on turnout.
+Example request:
 
-### `backend/routes/gov_verify_routes.py`
+```json
+{
+  "voter_id": "mongo_object_id",
+  "otp": "123456"
+}
+```
 
-This file simulates government verification.
+### `record_vote`
+Route:
 
-It pretends to verify:
+```text
+POST /api/auth/vote
+```
 
-- Aadhaar through UIDAI
-- voter ID through Election Commission
+What it does:
 
-This is demo logic, not real government API integration.
+- Receives `voterId`.
+- Marks `has_voted` as `true`.
+- Adds `voting_timestamp`.
+- Sends vote confirmation SMS.
+- Prevents duplicate voting by returning existing record if voter already voted.
 
-### `backend/routes/booth_allocation.py`
+Example request:
 
-This file handles locality-to-booth mapping.
+```json
+{
+  "voterId": "mongo_object_id"
+}
+```
 
-Features:
+### `compare_faces_advanced`
+Route:
 
-- create booth mapping manually
-- get mappings
-- delete mapping
-- auto-allocate booth from address
-- bulk analyze addresses
-- auto-generate mappings from voter data
+```text
+POST /api/auth/compare-faces
+```
 
-### `backend/routes/anomaly_routes.py`
+What it does:
 
-This file handles advanced anomaly detection.
+- Receives stored image URL/base64 and live image base64.
+- Calls `AdvancedFaceVerification`.
+- Returns match status, confidence, reason, and detailed scores.
 
-It checks for:
+## backend/routes/admin_routes.py
+This file handles admin actions: voters, booths, image storage, and deletion.
 
-- high turnout
-- low turnout
-- duplicate Aadhaar
-- shared phone numbers
-- location mismatch
-- vote spike
+### `manage_voters`
+Route:
 
-## 7. Important Utility Files
+```text
+GET /api/admin/voters
+POST /api/admin/voters
+```
 
-### `backend/utils/validation.py`
+GET:
 
-Contains helper functions for:
+- Returns all voters sorted by newest first.
+- Converts MongoDB ObjectId to string for JSON.
 
-- Aadhaar validation
-- voter ID validation
-- Indian phone validation
-- age calculation
+POST:
 
-### `backend/utils/sms.py`
+- Validates Voter ID, Aadhaar, phone number, and address.
+- Checks duplicates.
+- Validates optional photo using `VoterImageValidator`.
+- Stores photo in GridFS.
+- Inserts voter in MongoDB.
 
-Handles SMS sending using Twilio.
+Example request:
 
-If Twilio is not configured, it prints a simulated SMS in the console.
+```json
+{
+  "voter_id": "ABC1234567",
+  "aadhar_number": "123456789012",
+  "phone_number": "9876543210",
+  "full_name": "Anita Verma",
+  "date_of_birth": "1999-04-15",
+  "constituency": "Delhi Central",
+  "polling_station": "BOOTH001",
+  "address": "Gandhi Nagar, Delhi",
+  "image": "data:image/jpeg;base64,..."
+}
+```
 
-### `backend/utils/image_validator.py`
+### `add_voter`
+Route:
 
-Validates uploaded voter images.
+```text
+POST /api/admin/add-voter
+```
 
-Checks include:
+This is a dedicated voter creation endpoint used by the React admin form. It validates required fields, inserts the voter first, then attaches an image if valid.
 
-- file size
-- image format
-- image dimensions
-- orientation
-- blur
-- face detection
-- single-face requirement
+Why this design is useful:
 
-## 8. Face Verification Service
+- Voter creation can still succeed even if image validation fails.
+- The response can show `image_uploaded: false` with image error details.
 
-### `backend/services/advanced_face_verification.py`
+### `get_voter_image`
+Route:
 
-This is the AI module of the project.
+```text
+GET /api/admin/voters/<voter_id>/image
+```
 
-It performs:
+What it does:
 
-- anti-spoof detection
-- face comparison using DeepFace
-- confidence scoring
-- final match decision
+- Finds voter by MongoDB `_id`.
+- Reads image from GridFS using `image_id`.
+- Returns base64 data URL to frontend.
 
-The stored voter photo is compared against the live webcam image.
+### `upload_voter_image`
+Route:
 
-## 9. Frontend Main Pages
+```text
+POST /api/admin/upload-voter-image
+```
 
-### `frontend/src/App.js`
+Standalone image upload endpoint.
 
-Main router file.
+### `delete_voter`
+Route:
+
+```text
+DELETE /api/admin/voters/<voter_id>
+```
+
+What it does:
+
+- Finds voter.
+- Deletes associated GridFS photo if present.
+- Deletes voter document.
+
+### `manage_booths`
+Route:
+
+```text
+GET /api/admin/booths
+POST /api/admin/booths
+```
+
+GET returns booth list. POST inserts a new booth with `created_at`.
+
+## backend/routes/data_routes.py
+This file contains dashboard data, voter listing, CSV export, and a basic anomaly detector.
+
+### `get_dashboard_stats`
+Route:
+
+```text
+GET /api/data/dashboard/stats
+```
+
+What it calculates:
+
+- Total voters
+- Voted count
+- Not voted count
+- Voting percentage
+- 10 most recent votes
+
+Important code idea:
+
+```python
+total_voters = mongo.db.voters.count_documents({})
+voted_count = mongo.db.voters.count_documents({"has_voted": True})
+```
+
+Example response:
+
+```json
+{
+  "totalVoters": 100,
+  "votedCount": 40,
+  "notVotedCount": 60,
+  "votingPercentage": 40.0,
+  "recentVotes": []
+}
+```
+
+### `get_voters`
+Route:
+
+```text
+GET /api/data/voters
+```
+
+Returns up to 100 voters while hiding OTP fields.
+
+### `detect_anomalies`
+Route:
+
+```text
+POST /api/data/ai/detect-anomalies
+```
+
+This basic detector checks booth turnout:
+
+- High turnout if turnout is above 95% and booth has more than 20 registered voters.
+- Low turnout if turnout is below 10% and booth has more than 50 registered voters.
+
+### `get_anomalies`
+Route:
+
+```text
+GET /api/data/ai/anomalies
+```
+
+Returns anomaly documents sorted by latest detection time.
+
+### `export_voters_csv`
+Route:
+
+```text
+GET /api/data/export/voters-csv
+```
+
+Exports all voters as a CSV file.
+
+Example output columns:
+
+```text
+aadhar_number,address,age,constituency,date_of_birth,full_name,has_voted,phone_number,polling_station,voter_id
+```
+
+## backend/routes/anomaly_routes.py
+This file contains a more advanced demo anomaly detector registered under `/api/data/ai`.
+
+Main route:
+
+```text
+POST /api/data/ai/ai/detect-anomalies
+```
+
+Note: Because `app.py` registers this blueprint with `/api/data/ai` and the file route also starts with `/ai`, the final path contains `/ai/ai`. The frontend currently calls `/api/data/ai/detect-anomalies`, which is handled by `data_routes.py`.
+
+Detection types:
+
+- High Turnout
+- Low Turnout
+- Duplicate Identity
+- Location Mismatch
+- Shared Phone Fraud
+- Vote Spike
+
+Example anomaly:
+
+```json
+{
+  "booth_name": "BOOTH001",
+  "detection_type": "Duplicate Identity",
+  "details": "Duplicate Aadhar detected: 123456789012",
+  "confidence_score": 0.98
+}
+```
+
+Test routes:
+
+- `POST /api/data/ai/test/high-turnout`
+- `POST /api/data/ai/test/low-turnout`
+- `POST /api/data/ai/test/duplicate-aadhar`
+- `POST /api/data/ai/test/mark-20-voted`
+
+These mutate sample data to demonstrate anomaly detection.
+
+## backend/routes/analysis_routes.py
+This file builds voter analysis data for both API and HTML view.
+
+Important helper functions:
+
+- `_serialize_value`: converts MongoDB/date values into JSON-safe values.
+- `_serialize_voter`: serializes a complete voter object.
+- `_build_analysis_payload`: groups voters into categories.
 
 Routes:
 
-- `/` for voter authentication
-- `/dashboard` for dashboard
-- `/admin` for admin panel
-- `/booth-allocation` for booth allocation
+```text
+GET /api/voter-analysis
+GET /api/analysis/voter-categories
+GET /voter-analysis
+```
 
-### `frontend/src/pages/VoterAuth.js`
+The analysis payload separates voters into categories like voted and not voted, and computes summary values used by `VoterAnalysis.js` and `voter_analysis.html`.
 
-This is the main voter-side workflow page.
+Example response idea:
 
-It controls these steps:
+```json
+{
+  "total": 100,
+  "voted": [],
+  "not_voted": []
+}
+```
 
-1. voter enters details
-2. government verification runs
-3. face verification runs
-4. backend authenticates voter
-5. OTP is verified
-6. vote status is shown
-7. vote is recorded
+## backend/routes/booth_allocation.py
+This file manages automatic and manual polling booth allocation based on localities extracted from voter addresses.
 
-### `frontend/src/pages/Admin.js`
+### `create_mapping`
+Route:
 
-This is the admin page.
+```text
+POST /api/booth-allocation/create-mapping
+```
 
-Admin can:
+Creates or updates a booth mapping.
 
-- add voters
-- upload voter photos
-- delete voters
-- add booths
-- search voter data
+Example request:
 
-### `frontend/src/pages/Dashboard.js`
+```json
+{
+  "booth_id": "BOOTH001",
+  "booth_name": "Central School",
+  "locality_names": ["Keshav Nagar", "Gandhi Nagar"]
+}
+```
 
-Shows election statistics like:
+The code normalizes localities to lowercase:
 
-- total registered voters
-- number of votes cast
-- number of voters remaining
-- turnout percentage
-- recent votes
-- anomalies
+```python
+normalized_localities = [name.strip().lower() for name in locality_names]
+```
 
-### `frontend/src/pages/BoothAllocation.js`
+### `get_mappings`
+Route:
 
-Used for booth mapping management.
+```text
+GET /api/booth-allocation/mappings
+```
 
-Admin can:
+Returns all locality-to-booth mappings.
 
-- manually create booth mappings
-- auto-generate booth mappings from voter addresses
-- view and delete mappings
+### `delete_mapping`
+Route:
 
-## 10. Frontend Components
+```text
+DELETE /api/booth-allocation/delete-mapping/<booth_id>
+```
 
-### Voter Components
+Deletes a mapping by booth ID.
 
-- `AuthForm.js`
-  - takes voter ID, Aadhaar, and phone number
-- `GovernmentVerification.js`
-  - calls backend for ID verification
-- `FaceVerification.js`
-  - opens webcam and captures live face image
-- `OTPVerification.js`
-  - takes OTP input
-- `VotingStatus.js`
-  - shows voter status and allows vote recording
+### `auto_allocate_booth`
+Route:
 
-### Admin Components
+```text
+POST /api/booth-allocation/auto-allocate
+```
 
-- `AddVoterForm.js`
-  - form to add a voter with address, booth, and photo
-- `AddBoothForm.js`
-  - form to create polling booth
-- `VoterTable.js`
-  - shows all voter records in table format
-- `DeleteConfirmDialog.js`
-  - delete confirmation popup
+Checks whether a known locality appears inside an address.
 
-## 11. Database Collections
+Example:
 
-Main collections used:
+```json
+{
+  "address": "House 12, Keshav Nagar, Delhi"
+}
+```
+
+If `keshav nagar` exists in mapping, it returns the mapped booth.
+
+### `bulk_analyze`
+Route:
+
+```text
+POST /api/booth-allocation/bulk-analyze
+```
+
+Analyzes multiple addresses at once.
+
+### `get_booth_stats`
+Route:
+
+```text
+GET /api/booth-allocation/stats
+```
+
+Returns total mapped booths and total localities covered.
+
+### `auto_generate_allocations`
+Route:
+
+```text
+POST /api/booth-allocation/auto-generate
+```
+
+Reads all voter addresses, extracts locality patterns such as `nagar`, `colony`, `vihar`, `puram`, and groups localities into booths.
+
+Example regex idea:
+
+```python
+r'(\w+\s*nagar)'
+```
+
+This can extract values like `keshav nagar`.
+
+## backend/routes/gov_verify_routes.py
+This file simulates government database verification.
+
+Functions:
+
+- `simulate_uidai_verification`: simulates Aadhaar check.
+- `simulate_eci_verification`: simulates Election Commission voter ID check.
+- `verify_ids`: combines both results.
+
+Route:
+
+```text
+POST /api/auth/verify-government-ids
+```
+
+Example request:
+
+```json
+{
+  "aadhar_number": "123456789012",
+  "voter_id": "ABC1234567",
+  "full_name": "Anita Verma"
+}
+```
+
+Simulation rules:
+
+- Aadhaar ending in `0` returns forged.
+- Aadhaar ending in `1` or `2` returns suspicious.
+- Voter ID starting with `XXX` returns forged.
+- Voter ID starting with `SUS` returns suspicious.
+- Otherwise records are verified.
+
+Example response:
+
+```json
+{
+  "success": true,
+  "overall_status": "VERIFIED",
+  "verification_report": {
+    "uidai_aadhaar": {"status": "VERIFIED"},
+    "eci_voter_id": {"status": "VERIFIED"}
+  }
+}
+```
+
+## backend/routes/image_routes.py
+This file provides image upload/retrieval endpoints. It overlaps with image features in `admin_routes.py`.
+
+Routes:
+
+```text
+POST /api/admin/upload-voter-image
+GET /api/admin/get-voter-image/<voter_id>
+```
+
+What it does:
+
+- Validates image with `VoterImageValidator`.
+- Decodes base64 image.
+- Stores image in MongoDB GridFS.
+- Retrieves stored image as base64 for frontend display.
+
+Example response:
+
+```json
+{
+  "success": true,
+  "image_id": "gridfs_object_id",
+  "message": "Image uploaded and validated successfully"
+}
+```
+
+## backend/services/advanced_face_verification.py
+This file contains the face matching and anti-spoofing logic.
+
+Class:
+
+```python
+class AdvancedFaceVerification:
+```
+
+### `_load_deepface`
+Loads DeepFace only when needed. This is useful because DeepFace/TensorFlow can be slow and heavy at startup.
+
+### `detect_anti_spoof`
+Checks whether the live image may be a spoof/photo/screen replay.
+
+Checks used:
+
+- Glare ratio: too many bright white pixels may mean screen glare.
+- Texture variance: very low texture can mean flat photo.
+- Edge density: low edge count can mean unnatural/washed image.
+
+Example output:
+
+```json
+{
+  "is_real": true,
+  "confidence": 80.0,
+  "indicators": []
+}
+```
+
+### `comprehensive_verification`
+Main face verification function.
+
+What it does:
+
+1. Loads stored image from URL or base64 data URL.
+2. Loads live image from base64.
+3. Runs anti-spoof checks.
+4. Uses DeepFace Facenet model to compare faces.
+5. Computes final confidence using embedding score, geometry score, and anti-spoof score.
+
+Important code idea:
+
+```python
+result = DeepFace.verify(stored_cv, live_cv, model_name='Facenet', enforce_detection=True)
+```
+
+Example result:
+
+```json
+{
+  "match": true,
+  "confidence": 0.82,
+  "reason": "Verification successful",
+  "detailed_scores": {
+    "face_embedding_score": "78.5%",
+    "geometry_score": "88.0%",
+    "anti_spoof_score": "90.0%",
+    "final_confidence": "82.4%"
+  }
+}
+```
+
+## backend/utils/validation.py
+This file contains small validation helper functions.
+
+### `validate_aadhaar`
+Checks whether Aadhaar is exactly 12 digits.
+
+Example:
+
+```python
+validate_aadhaar("123456789012")  # True
+validate_aadhaar("12345")         # False
+```
+
+### `validate_voter_id`
+Checks voter ID pattern: 3 uppercase letters followed by 7 digits.
+
+Example:
+
+```python
+validate_voter_id("ABC1234567")  # True
+validate_voter_id("AB123")       # False
+```
+
+### `validate_indian_phone`
+Checks 10-digit Indian phone number starting with 6, 7, 8, or 9.
+
+Example:
+
+```python
+validate_indian_phone("9876543210")  # True
+validate_indian_phone("1234567890")  # False
+```
+
+### `calculate_age`
+Calculates age from `YYYY-MM-DD`.
+
+Example:
+
+```python
+calculate_age("2000-05-20")
+```
+
+## backend/utils/sms.py
+This file sends SMS through Twilio.
+
+### `get_twilio_client`
+Reads Twilio credentials from environment variables and creates a Twilio client.
+
+### `normalize_phone_number`
+Converts Indian phone numbers to international format.
+
+Example:
+
+```python
+normalize_phone_number("9876543210")
+```
+
+Output:
+
+```text
++919876543210
+```
+
+### `send_sms`
+Sends an SMS if Twilio credentials exist.
+
+Important behavior:
+
+- If Twilio credentials are missing, it prints a simulated SMS and returns failure/simulated status.
+- If Twilio sends successfully, it returns the Twilio SID.
+
+Example:
+
+```python
+send_sms("9876543210", "Your OTP is 123456")
+```
+
+## backend/utils/image_validator.py
+This file validates uploaded voter photos.
+
+Class:
+
+```python
+class VoterImageValidator:
+```
+
+Validation rules:
+
+- File size should be 50KB to 100KB.
+- Format must be JPEG/JPG/PNG.
+- Photo dimensions should match 4.5cm by 3.5cm at 300 DPI with 10% tolerance.
+- Image should not be tilted.
+- Image should not be blurred.
+- Exactly one face should be detected.
+- Face should occupy 30% to 70% of image height.
+
+Example:
+
+```python
+validator = VoterImageValidator()
+result = validator.validate_image("data:image/jpeg;base64,...")
+```
+
+Example result:
+
+```json
+{
+  "valid": false,
+  "errors": ["Image appears blurred. Please upload a clear, sharp image."]
+}
+```
+
+## backend/utils/__init__.py
+This file is empty. Its purpose is to make `utils` behave like a Python package so files can import from `utils.validation`, `utils.sms`, etc.
+
+## backend/templates/voter_analysis.html
+This is a Flask-rendered HTML page for voter analysis.
+
+What it contains:
+
+- HTML layout for analysis results.
+- CSS styling.
+- Template placeholders/data rendered from Flask.
+
+Route using it:
+
+```text
+GET /voter-analysis
+```
+
+Explanation:
+
+- This is separate from React.
+- It can be opened directly from the Flask backend.
+- It is useful for quickly viewing analysis without the React UI.
+
+# Frontend Files
+
+## frontend/package.json
+This file defines the React project dependencies and scripts.
+
+Important dependencies:
+
+- `react` and `react-dom`: UI framework
+- `react-router-dom`: page routing
+- `axios`: API calls
+- `framer-motion`: animations
+- `lucide-react`: icons
+- `react-scripts`: Create React App tooling
+- `tailwindcss`: utility CSS framework
+
+Scripts:
+
+```json
+{
+  "start": "react-scripts start",
+  "build": "react-scripts build",
+  "test": "react-scripts test"
+}
+```
+
+Example:
+
+```bat
+npm start
+```
+
+## frontend/package-lock.json
+This locks exact dependency versions. It is generated by npm and ensures the same package versions install on another machine.
+
+You usually do not manually edit this file.
+
+## frontend/tailwind.config.js
+This configures Tailwind CSS scanning and custom colors.
+
+Important code:
+
+```javascript
+colors: {
+  'saffron': '#FF9933',
+  'green': '#138808',
+  'navy': '#000080',
+}
+```
+
+Explanation:
+
+- These colors match the Indian flag theme used in the UI.
+- Tailwind scans `src/**/*.{js,jsx,ts,tsx}` for class names.
+
+Example class:
+
+```jsx
+<span className="text-saffron">AI</span>
+```
+
+## frontend/public/index.html
+This is the base HTML page for the React app.
+
+Important code:
+
+```html
+<div id="root"></div>
+```
+
+Explanation:
+
+- React injects the whole app inside the `root` div.
+- `frontend/src/index.js` connects React to this element.
+
+## frontend/src/index.js
+This is the React entry point.
+
+Important code:
+
+```javascript
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+```
+
+Explanation:
+
+- Finds the `root` element from `index.html`.
+- Renders the top-level `App` component.
+
+## frontend/src/index.css
+This file loads Tailwind CSS layers and global styles.
+
+Typical Tailwind directives:
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+Explanation:
+
+- Makes Tailwind utility classes available throughout React.
+- May also contain global body/background/font styling.
+
+## frontend/src/App.js
+This file defines the main layout and routes.
+
+Main components:
+
+- `Layout`: header, navigation, footer, and page wrapper.
+- `App`: sets up React Router routes.
+
+Important routes:
+
+```jsx
+<Route path="/" element={<VoterAuth />} />
+<Route path="/dashboard" element={<Dashboard />} />
+<Route path="/admin" element={<Admin />} />
+<Route path="/booth-allocation" element={<BoothAllocation />} />
+```
+
+Explanation:
+
+- `/` shows voter login/authentication.
+- `/dashboard` shows voting statistics and anomalies.
+- `/admin` shows admin voter/booth management.
+- `/booth-allocation` shows booth locality mapping.
+
+Navigation example:
+
+```jsx
+{ name: "Voter Login", path: "/", icon: Shield }
+```
+
+The code maps this array into clickable links.
+
+## frontend/src/pages/VoterAuth.js
+This is the main voter-side page. It controls the multi-step voting flow.
+
+Major state values:
+
+- `step`: current screen/stage.
+- `voterData`: authenticated voter record.
+- `voterIdForOTP`: MongoDB voter ID used during OTP verification.
+- `otpSmsStatus`: SMS sending status.
+- `error`: error message.
+- `isLoading`: loading state.
+
+Main flow:
+
+1. User fills credentials in `AuthForm`.
+2. Government verification component runs.
+3. Face verification captures webcam image.
+4. Backend `/api/auth/authenticate` sends OTP.
+5. User enters OTP in `OTPVerification`.
+6. Backend `/api/auth/verify-otp` verifies OTP.
+7. User confirms vote in `VotingStatus`.
+8. Backend `/api/auth/vote` records the vote.
+
+Important API call:
+
+```javascript
+fetch('http://localhost:5000/api/auth/authenticate', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(payload)
+})
+```
+
+Example payload:
+
+```json
+{
+  "voter_id": "ABC1234567",
+  "aadhar_number": "123456789012",
+  "phone_number": "9876543210",
+  "live_image_data": "data:image/jpeg;base64,..."
+}
+```
+
+## frontend/src/pages/Admin.js
+This page is the admin panel.
+
+Main responsibilities:
+
+- Fetch voters and booths.
+- Show forms for adding voters and booths.
+- Search/filter voters.
+- Delete voters.
+- Show success/error notifications.
+
+Important API calls:
+
+```javascript
+axios.get('http://localhost:5000/api/admin/voters')
+axios.get('http://localhost:5000/api/admin/booths')
+axios.post('http://localhost:5000/api/admin/add-voter', voterData)
+axios.delete(`http://localhost:5000/api/admin/voters/${voterId}`)
+```
+
+Example:
+
+When admin submits Add Voter form, `Admin.js` sends the form data to Flask and refreshes the table after success.
+
+## frontend/src/pages/Dashboard.js
+This page shows election statistics and anomaly detection.
+
+Main state values:
+
+- `stats`: total voters, voted count, not voted count, voting percentage, recent votes.
+- `anomalies`: anomaly list from backend.
+- `isLoading`: page loading status.
+- `isDetecting`: anomaly detection button loading status.
+
+Important API calls:
+
+```javascript
+axios.get('http://localhost:5000/api/data/dashboard/stats')
+axios.get('http://localhost:5000/api/data/ai/anomalies')
+axios.post('http://localhost:5000/api/data/ai/detect-anomalies')
+```
+
+Example:
+
+Clicking the detect anomalies button calls the backend detection route, then reloads anomaly data.
+
+## frontend/src/pages/BoothAllocation.js
+This page manages booth allocation mappings.
+
+Main responsibilities:
+
+- Fetch existing mappings.
+- Fetch booths from admin API.
+- Add locality-to-booth mapping.
+- Delete mapping.
+- Auto-generate mappings from voter addresses.
+- Display summary and results.
+
+Important API calls:
+
+```javascript
+axios.get('http://localhost:5000/api/booth-allocation/mappings')
+axios.get('http://localhost:5000/api/admin/booths')
+axios.post('http://localhost:5000/api/booth-allocation/create-mapping', data)
+axios.delete(`http://localhost:5000/api/booth-allocation/delete-mapping/${boothId}`)
+axios.post('http://localhost:5000/api/booth-allocation/auto-generate')
+```
+
+Example mapping:
+
+```json
+{
+  "booth_id": "BOOTH001",
+  "booth_name": "Polling Station 1",
+  "locality_names": ["keshav nagar", "gandhi nagar"]
+}
+```
+
+## frontend/src/components/VoterAnalysis.js
+This component fetches and displays voter categories.
+
+Important API call:
+
+```javascript
+fetch('http://localhost:5000/api/analysis/voter-categories')
+```
+
+What it does:
+
+- Shows loading state.
+- Stores returned data in `data`.
+- Tracks active tab with `activeTab`.
+- Displays voter categories such as voted/not voted.
+
+Example:
+
+If active tab is `voted`, it displays voters who have already cast their vote.
+
+## frontend/src/components/admin/AddVoterForm.js
+This component renders the form for adding a voter.
+
+Main fields:
+
+- Voter ID
+- Aadhaar number
+- Phone number
+- Full name
+- Date of birth
+- Address
+- Constituency
+- Polling station
+- Face image
+
+Important feature:
+
+- It can call booth auto-allocation before submitting.
+- It sends voter data to parent `Admin.js` through `onSubmit`.
+
+Example form data:
+
+```json
+{
+  "voter_id": "ABC1234567",
+  "aadhar_number": "123456789012",
+  "phone_number": "9876543210",
+  "full_name": "Anita Verma",
+  "date_of_birth": "1999-04-15",
+  "address": "Keshav Nagar, Delhi"
+}
+```
+
+## frontend/src/components/admin/AddBoothForm.js
+This component renders the form for adding a booth.
+
+Main fields:
+
+- Booth ID/name
+- Location/address information
+- Capacity or booth details depending on UI fields
+
+What it does:
+
+- Stores form input in React state.
+- Calls `onSubmit` when admin submits.
+- Calls `onCancel` when admin closes form.
+
+Example:
+
+```json
+{
+  "booth_name": "Central School Booth",
+  "location": "Keshav Nagar"
+}
+```
+
+## frontend/src/components/admin/VoterTable.js
+This component displays voters in a table.
+
+Main responsibilities:
+
+- Shows voter rows.
+- Shows loading/empty states.
+- Displays whether voter has a photo.
+- Opens delete confirmation dialog.
+- Calls parent callback for delete.
+
+Props:
 
 - `voters`
-- `booths`
-- `anomalies`
-- `locality_booth_mapping`
+- `isLoading`
+- `onRefresh`
+- `onDeleteVoter`
 
-Voter images are stored using GridFS.
+Example:
 
-Typical voter record includes:
+```jsx
+<VoterTable voters={voters} isLoading={isLoading} onRefresh={fetchData} />
+```
 
-- voter ID
+## frontend/src/components/admin/DeleteConfirmDialog.js
+This component shows a confirmation modal before deleting a voter.
+
+Props:
+
+- `isOpen`: whether modal is visible.
+- `onConfirm`: delete action.
+- `onCancel`: close modal.
+- `voterName`: name displayed in dialog.
+- `hasPhoto`: warns that photo will also be deleted.
+
+Example:
+
+```jsx
+<DeleteConfirmDialog
+  isOpen={deleteDialogOpen}
+  onConfirm={handleDelete}
+  onCancel={closeDialog}
+  voterName="Anita Verma"
+/>
+```
+
+## frontend/src/components/admin/ImageUpload.js
+This component handles admin-side voter photo upload UI.
+
+Features:
+
+- Drag and drop upload.
+- File picker upload.
+- Image preview.
+- Client-side validation state.
+- Validation error display.
+- Calls `onImageChange` to pass selected image to parent form.
+
+Important state:
+
+- `image`
+- `imagePreview`
+- `validationErrors`
+- `isValidating`
+- `dragActive`
+
+Example:
+
+```jsx
+<ImageUpload onImageChange={setFaceImage} />
+```
+
+## frontend/src/components/voter/AuthForm.js
+This component is the first voter login form.
+
+Fields:
+
+- Voter ID
 - Aadhaar number
-- phone number
-- full name
-- date of birth
-- age
-- address
-- constituency
-- polling station
-- has voted status
-- voting timestamp
-- OTP code
-- OTP expiry
-- image ID
+- Phone number
 
-## 12. Complete Voter Workflow
+Props:
 
-### Step 1: Enter credentials
+- `onSubmit`: called with form data.
+- `isLoading`: disables UI while backend is processing.
 
-The voter enters:
+Example:
 
-- voter ID
-- Aadhaar number
-- phone number
+```json
+{
+  "voter_id": "ABC1234567",
+  "aadhar_number": "123456789012",
+  "phone_number": "9876543210"
+}
+```
 
-### Step 2: Government verification
+## frontend/src/components/voter/GovernmentVerification.js
+This component shows simulated UIDAI and ECI verification.
 
-The system simulates verification with:
+What it does:
 
-- UIDAI for Aadhaar
-- Election Commission for voter ID
+- Receives `formData`.
+- Calls `/api/auth/verify-government-ids`.
+- Shows progress bar/status badges.
+- Calls `onComplete` when verification finishes.
 
-### Step 3: Face verification
+Important API call:
 
-The voter captures a live webcam photo.
+```javascript
+fetch('http://localhost:5000/api/auth/verify-government-ids', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(formData)
+})
+```
 
-Backend compares:
+Possible statuses:
 
-- stored voter image
-- live captured image
+- `VERIFIED`
+- `REJECTED`
+- `FLAGGED_FOR_REVIEW`
 
-### Step 4: OTP generation
+## frontend/src/components/voter/FaceVerification.js
+This component captures a live webcam image.
 
-If face verification passes, backend:
+Main features:
 
-- generates OTP
-- stores OTP in MongoDB
-- sends SMS using Twilio or console simulation
+- Requests camera access.
+- Shows live video preview.
+- Captures frame into a canvas.
+- Converts captured image to base64.
+- Sends captured image to parent via `onVerify`.
 
-### Step 5: OTP verification
+Important browser APIs:
 
-The voter enters the OTP.
+```javascript
+navigator.mediaDevices.getUserMedia({ video: true })
+canvas.toDataURL('image/jpeg')
+```
 
-Backend checks:
+Example captured output:
 
-- whether OTP matches
-- whether OTP expired
+```text
+data:image/jpeg;base64,/9j/4AAQSk...
+```
 
-### Step 6: Vote recording
+## frontend/src/components/voter/OTPVerification.js
+This component lets the voter enter the OTP.
 
-If OTP is correct, the voter can record a vote.
+Features:
 
-Backend updates:
+- OTP input.
+- 5-minute countdown timer.
+- Back button.
+- Shows SMS status.
+- Calls `onVerify(otp)` when submitted.
 
-- `has_voted = True`
-- `voting_timestamp`
+Important state:
 
-Then a confirmation SMS is sent.
+```javascript
+const [otp, setOtp] = useState('');
+const [timeLeft, setTimeLeft] = useState(300);
+```
 
-## 13. Complete Admin Workflow
+Example:
 
-### Add voter
+```jsx
+<OTPVerification onVerify={handleOTPVerify} />
+```
 
-Admin enters voter details and uploads photo.
+## frontend/src/components/voter/VotingStatus.js
+This component shows voter details after OTP verification and lets the voter cast vote.
 
-Backend:
+Props:
 
-- validates fields
-- checks duplicates
-- validates photo
-- stores image in GridFS
-- stores voter record in MongoDB
+- `voterData`: verified voter record.
+- `onVote`: records vote.
+- `onReset`: starts over.
+- `isLoading`: disables actions during API call.
 
-### Delete voter
+What it displays:
 
-Admin can delete voter record and associated image.
+- Voter name
+- Voter ID
+- Constituency
+- Polling station
+- Already voted / ready to vote status
 
-### Add booth
+Example:
 
-Admin creates booth records for polling stations.
+```jsx
+<VotingStatus voterData={voterData} onVote={handleVote} />
+```
 
-### Smart booth allocation
+# End-To-End API Examples
 
-Admin can auto-fill booth assignment based on locality found in address.
+## Add Voter
+Request:
 
-## 14. Dashboard Workflow
+```http
+POST /api/admin/add-voter
+Content-Type: application/json
+```
 
-Dashboard fetches data from backend and displays:
+Body:
 
-- total voters
-- total voted
-- turnout percentage
-- recent votes
-- anomaly results
+```json
+{
+  "voter_id": "ABC1234567",
+  "aadhar_number": "123456789012",
+  "phone_number": "9876543210",
+  "full_name": "Anita Verma",
+  "date_of_birth": "1999-04-15",
+  "address": "Keshav Nagar, Delhi",
+  "constituency": "Delhi Central",
+  "polling_station": "BOOTH001"
+}
+```
 
-It can also run AI-style anomaly detection.
+## Authenticate Voter
+Request:
 
-## 15. Booth Allocation Workflow
+```http
+POST /api/auth/authenticate
+```
 
-This module maps localities to polling booths.
+Body:
 
-It supports:
+```json
+{
+  "voter_id": "ABC1234567",
+  "aadhar_number": "123456789012",
+  "phone_number": "9876543210"
+}
+```
 
-- manual mapping
-- automatic booth assignment
-- auto-generation of mappings from voter addresses
+## Verify OTP
+Request:
 
-This helps reduce manual booth assignment work.
+```http
+POST /api/auth/verify-otp
+```
 
-## 16. Seed Script
+Body:
 
-### `backend/seed_database.py`
+```json
+{
+  "voter_id": "mongo_object_id",
+  "otp": "123456"
+}
+```
 
-This script fills MongoDB with fake voter data for testing.
+## Record Vote
+Request:
 
-It:
+```http
+POST /api/auth/vote
+```
 
-- creates fake voters
-- assigns random constituencies and booths
-- marks some voters as already voted
+Body:
 
-This is useful for demo and dashboard testing.
+```json
+{
+  "voterId": "mongo_object_id"
+}
+```
 
-Note: this script uses `Faker`, which is not currently listed in `backend/requirements.txt`.
+## Dashboard Stats
+Request:
 
-## 17. Strengths of the Project
+```http
+GET /api/data/dashboard/stats
+```
 
-- good full-stack architecture
-- clear separation of frontend and backend
-- strong demo features
-- includes AI/face verification concept
-- includes admin tools
-- includes booth allocation
-- includes dashboard analytics
+Response:
 
-## 18. Current Nature of the Project
+```json
+{
+  "totalVoters": 100,
+  "votedCount": 40,
+  "notVotedCount": 60,
+  "votingPercentage": 40.0
+}
+```
 
-This looks like a student/demo project that is still evolving.
+# Important Notes For Viva Or Presentation
 
-Reasons:
+## Why Flask?
+Flask is lightweight and easy to organize using blueprints. This project uses Flask as a REST API server for React.
 
-- some older commented code still exists
-- some routes overlap in responsibility
-- some response formats are slightly inconsistent between frontend and backend
+## Why MongoDB?
+MongoDB stores flexible voter documents. It also supports GridFS, which is used to store voter photos.
 
-Still, the overall idea and implementation are strong and useful for presentation, demo, or minor project explanation.
+## Why React?
+React makes it easier to create a multi-page, interactive UI with stateful forms, dashboards, modals, and step-based authentication.
 
-## 19. Final Summary
+## Why OTP?
+OTP adds a second authentication factor. Even if someone knows the Voter ID and Aadhaar, they still need the registered phone.
 
-This project is a smart digital voter authentication platform built using React, Flask, and MongoDB. It verifies a voter through credential matching, simulated government ID checks, face verification, and OTP verification. It also provides admin management, booth mapping, dashboard analytics, and anomaly detection in one integrated system.
+## Why Face Verification?
+Face verification adds biometric identity checking. The system compares the stored voter photo with a live webcam photo before sending OTP.
+
+## Why Anomaly Detection?
+Anomaly detection helps admins identify suspicious voting behavior, such as duplicate identity, shared phone number, unusual turnout, or vote spikes.
+
+# Generated And Runtime Files Not Explained Line-By-Line
+The following are intentionally not explained as source code because they are generated or runtime data:
+
+- `frontend/node_modules/`: installed npm dependencies
+- `frontend/build/`: production build output
+- `backend/venv/`, `.venv/`, `.venv-1/`: Python virtual environments
+- `mongo-data-real/`: MongoDB database engine files
+- `*.log` and `*.err`: runtime logs
+- `__pycache__/`: Python bytecode cache
+
+These files are required for running the project locally, but they are not handwritten project logic.
